@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+
+void forkEnLargeur(int nbEnfant)
+{
+    pid_t pid;
+    while(pid != 0 && nbEnfant >= 0)
+    {
+        pid = fork();
+        if(pid == 0)
+        {
+            printf("enfant %d \n", nbEnfant);
+            sleep(10);
+        }
+        else
+        {
+            if(nbEnfant == 0)
+                while(wait(0) != -1);
+        }
+        nbEnfant--;
+    }
+}
+
+void forkEnHauteur(int nbEnfant)
+{
+    pid_t pid = 0;
+    while(pid == 0 && nbEnfant >= 0)
+    {
+        pid = fork();
+        if(pid == 0)
+        {
+            printf("enfant %d \n", nbEnfant);
+            if(nbEnfant == 0)
+                sleep(5);
+        }
+        else
+        {
+            //if(nbEnfant == 0)
+                while(wait(0) != -1);
+        }
+        nbEnfant--;
+    }
+}
+
+
+int main()
+{
+    //forkEnLargeur(3);
+    forkEnHauteur(3);
+}
