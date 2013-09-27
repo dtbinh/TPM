@@ -5,6 +5,10 @@ to setup
   ask patches
   [ if random-float 100 < density
     [ set pcolor yellow ] ]
+  
+  ask patches
+  [ if random-float 100 < density
+    [ set pcolor green ] ]
   ;; randomly distribute termites
   create-turtles number [
     set color white
@@ -20,25 +24,31 @@ to go  ;; turtle procedure
 end
 
 to search-for-chip  ;; turtle procedure -- "picks up chip" by turning orange
-  ifelse pcolor = yellow
-  [ set pcolor black
-    set color orange
+  ifelse pcolor = yellow or pcolor = green
+  [ ifelse pcolor = yellow
+    [ set color orange ]
+    [ set color blue ]
+    set pcolor black
     fd 20 ]
   [ wiggle
     search-for-chip ]
 end
 
 to find-new-pile  ;; turtle procedure -- look for yellow patches
-  if pcolor != yellow
+  if pcolor != yellow and pcolor != green
   [ ;;wiggle
-    set heading towardsxy 0 0
-    fd 1
+    ifelse color = blue
+    [ set heading towardsxy -50 0 ]
+    [ set heading towardsxy 50 0]
+    fd 10
     find-new-pile ]
 end
 
 to put-down-chip  ;; turtle procedure -- finds empty spot & drops chip
   ifelse pcolor = black
-  [ set pcolor yellow
+  [ ifelse color = orange
+    [ set pcolor yellow ]
+    [ set pcolor green ]
     set color white
     get-away ]
   [ rt random 360
@@ -133,7 +143,7 @@ number
 number
 1
 2000
-663
+1013
 1
 1
 NIL
@@ -148,7 +158,7 @@ density
 density
 0.0
 100.0
-9
+33
 1.0
 1
 %
