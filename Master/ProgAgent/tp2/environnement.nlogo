@@ -1,57 +1,70 @@
-;; on declare les variables propre aux turtles
-turtles-own [ len ]
+breed [cows cow]
+patches-own [ counter heightPlant lastTick]
 
 to setup
-  ;; (for this model to work with NetLogo's new plotting features,
-  ;; __clear-all-and-reset-ticks should be replaced with clear-all at
-  ;; the beginning of your setup procedure and reset-ticks at the end
-  ;; of the procedure.)
-  __clear-all-and-reset-ticks
-  set-default-shape turtles "turtle"
+  clear-all
+  set-default-shape turtles "bug"
   
-  ;; place les tortues de maniere aleatoire
-  create-turtles number [
-    set color red
-    setxy random-xcor random-ycor
-    set size 5 ;; pour mieux voir les tortues
-    set len 1 ;; init variable
+  ask patches [ 
+    set counter random 10000
+    set heightPlant 1
+    set lastTick 0
   ]
   
-  ;;ask patches [set pcolor gray]
+  ;;create-cows number [
+    ;;set color white
+    ;;setxy random-xcor random-ycor
+    ;;set size 1
+  ;;]
+  reset-ticks
+end
+
+to move
+  fd 1
+  rt random 360
+end
+
+to check-grow
+  ask patches [ 
+    if counter <= 0
+    [ set pcolor  green
+      set counter time-to-grow
+      set lastTick ticks
+    ]
+    if heightPlant = 0
+    [
+      set pcolor black
+    ]
+    if pcolor = green
+    [
+      if ticks - lastTick >= time-to-grow
+      [
+        set heightPlant heightPlant + 10
+      ]
+      set pcolor scale-color green heightPlant 0 70
+    ]
+    
+  ]
 end
   
-to agiter 
-  rt random 50
-  lt random 50
-end
-
-to spiral [long angle]
-  pen-down
-  fd long
-  rt 360 / angle
-end
 
 to go
-  ;;agiter
-  ;;fd 1
-  spiral len 5
-  set len len + 1
+  check-grow
+  ;;ask cows [ move ]
+  ask patches [
+    set counter counter - 1
+  ]
+  tick
 end
-
-;;-------------------------------------------------------
-;; 
-;;  Auteur: J. Ferber
-;;
-;;------------------------------------------------------
 @#$#@#$#@
 GRAPHICS-WINDOW
-200
+210
 10
-612
-443
-100
-100
-2.0
+649
+470
+16
+16
+13.0
 1
 10
 1
@@ -61,39 +74,52 @@ GRAPHICS-WINDOW
 1
 1
 1
--100
-100
--100
-100
+-16
+16
+-16
+16
 0
 0
-0
+1
 ticks
 30.0
 
-BUTTON
-97
-117
-158
-150
-go
-go
-T
+SLIDER
+19
+41
+191
+74
+number
+number
+0
+1000
+32
 1
-T
-TURTLE
-NIL
-NIL
-NIL
-NIL
 1
+NIL
+HORIZONTAL
+
+SLIDER
+18
+92
+190
+125
+time-to-grow
+time-to-grow
+0
+10000
+510
+1
+1
+NIL
+HORIZONTAL
 
 BUTTON
-24
-117
-85
+21
 150
-setup
+94
+183
+NIL
 setup
 NIL
 1
@@ -105,31 +131,59 @@ NIL
 NIL
 1
 
-SLIDER
-6
-37
-177
-70
-number
-number
-1
-2000
-1
-1
-1
+BUTTON
+109
+155
+172
+188
 NIL
-HORIZONTAL
+go
+T
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
 
 @#$#@#$#@
-## QU'EST CE QUE C'EST
+## WHAT IS IT?
 
-Un programme hyper-simpliste o� les tortues avancent de mani�re al�atoires..  
-Un programme qui a �t� r�alis� simplement pour aider � d�marrer..
+(a general understanding of what the model is trying to show or explain)
 
-## CREDITS ET REFERENCES
+## HOW IT WORKS
 
-Cr�� par J. Ferber  
-http://www.lirmm.fr/~ferber
+(what rules the agents use to create the overall behavior of the model)
+
+## HOW TO USE IT
+
+(how to use the model, including a description of each of the items in the Interface tab)
+
+## THINGS TO NOTICE
+
+(suggested things for the user to notice while running the model)
+
+## THINGS TO TRY
+
+(suggested things for the user to try to do (move sliders, switches, etc.) with the model)
+
+## EXTENDING THE MODEL
+
+(suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
+
+## NETLOGO FEATURES
+
+(interesting or unusual features of NetLogo that the model uses, particularly in the Code tab; or where workarounds were needed for missing features)
+
+## RELATED MODELS
+
+(models in the NetLogo Models Library and elsewhere which are of related interest)
+
+## CREDITS AND REFERENCES
+
+(a reference to the model's URL on the web if it has one, as well as any other necessary credits, citations, and links)
 @#$#@#$#@
 default
 true
@@ -323,6 +377,22 @@ Polygon -7500403 true true 135 105 90 60 45 45 75 105 135 135
 Polygon -7500403 true true 165 105 165 135 225 105 255 45 210 60
 Polygon -7500403 true true 135 90 120 45 150 15 180 45 165 90
 
+sheep
+false
+15
+Circle -1 true true 203 65 88
+Circle -1 true true 70 65 162
+Circle -1 true true 150 105 120
+Polygon -7500403 true false 218 120 240 165 255 165 278 120
+Circle -7500403 true false 214 72 67
+Rectangle -1 true true 164 223 179 298
+Polygon -1 true true 45 285 30 285 30 240 15 195 45 210
+Circle -1 true true 3 83 150
+Rectangle -1 true true 65 221 80 296
+Polygon -1 true true 195 285 210 285 210 240 240 210 195 210
+Polygon -7500403 true false 276 85 285 105 302 99 294 83
+Polygon -7500403 true false 219 85 210 105 193 99 201 83
+
 square
 false
 0
@@ -407,6 +477,13 @@ Line -7500403 true 40 84 269 221
 Line -7500403 true 40 216 269 79
 Line -7500403 true 84 40 221 269
 
+wolf
+false
+0
+Polygon -16777216 true false 253 133 245 131 245 133
+Polygon -7500403 true true 2 194 13 197 30 191 38 193 38 205 20 226 20 257 27 265 38 266 40 260 31 253 31 230 60 206 68 198 75 209 66 228 65 243 82 261 84 268 100 267 103 261 77 239 79 231 100 207 98 196 119 201 143 202 160 195 166 210 172 213 173 238 167 251 160 248 154 265 169 264 178 247 186 240 198 260 200 271 217 271 219 262 207 258 195 230 192 198 210 184 227 164 242 144 259 145 284 151 277 141 293 140 299 134 297 127 273 119 270 105
+Polygon -7500403 true true -1 195 14 180 36 166 40 153 53 140 82 131 134 133 159 126 188 115 227 108 236 102 238 98 268 86 269 92 281 87 269 103 269 113
+
 x
 false
 0
@@ -416,17 +493,15 @@ Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
 NetLogo 5.0.4
 @#$#@#$#@
-setup
-ask turtles [ repeat 150 [ go ] ]
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
 default
 0.0
--0.2 0 0.0 1.0
+-0.2 0 1.0 0.0
 0.0 1 1.0 0.0
-0.2 0 0.0 1.0
+0.2 0 1.0 0.0
 link direction
 true
 0
