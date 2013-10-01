@@ -1,33 +1,32 @@
 package dico;
 
 public abstract class AbstractDictionary implements IDictionary{
-	private Object[] key;
-	private Object[] value;
-	private int compteur;
+	protected Object[] keys;
+	protected Object[] values;
+	protected int compteur;
 	
+	public AbstractDictionary() {
+		//super();
+		this.compteur = 0;
+		this.keys = new Object[1];
+		this.values = new Object[1];
+	}
 	
+	public AbstractDictionary(Object[] key, Object[] value, int compteur) {
+		//super();
+		this.keys = key;
+		this.values = value;
+		this.compteur = compteur;
+	}
 	
-	public Object[] getKey() {
-		return key;
-	}
-	public void setKey(Object[] key) {
-		this.key = key;
-	}
-	public Object[] getValue() {
-		return value;
-	}
-	public void setValue(Object[] value) {
-		this.value = value;
-	}
 	public Object getOneValue(int index)
 	{
-		return value[index];
+		return values[index];
 	}
 	
 	protected abstract int indexOf(Object key);
 	protected abstract int newIndexOf(Object key);
 	
-	public int size() { return compteur; }
 	
 	@Override
 	public Object get(Object key) {
@@ -38,19 +37,23 @@ public abstract class AbstractDictionary implements IDictionary{
 	}
 	@Override
 	public Object put(Object key, Object value) {
-		
+		//utilise newIndexOf pour preparer l'insertion
+		//cette methode return l'index sur lequel on peut inserer la valeur
+		if(!containsKey(key))
+		{
+			int index = newIndexOf(key);
+			keys[index] = key;
+			values[index] = value;
+			compteur++;
+		}
 		return this;
 	}
 	@Override
 	public boolean isEmpty() {
-		if(size() != 0)
-			return true;
-		return false;
+		return compteur == 0;
 	}
 	@Override
 	public boolean containsKey(Object key) {
-		if(indexOf(key) != -1)
-			return true;
-		return false;
+		return indexOf(key) != -1;
 	}
 }
