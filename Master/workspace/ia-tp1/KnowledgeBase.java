@@ -82,11 +82,43 @@ public class KnowledgeBase {
 	public void forwardChaning()
 	{
 		ArrayList<Atom> ATraiter = new ArrayList<Atom>(bf.getAtoms());
-		int n = 0;
-		while(n < ATraiter.size())
+		int brSize = br.size();
+		int[] compteur = new int[brSize];
+		for(int i = 0; i < brSize; i++)
 		{
-			System.out.println(" " + ATraiter.get(n));
-			n++;
+			Rule r = br.getRule(i);
+			compteur[i] = r.getHypothesis().size();
+		}
+		int x = 0;
+		while(!ATraiter.isEmpty())
+		{
+			Atom a = ATraiter.get(x);
+			ATraiter.remove(x);
+			for(int i = 0; i < brSize; i++)
+			{
+				Rule r1 = br.getRule(i);
+				for(Atom b : r1.getHypothesis())
+				{
+					if(a.equalsA(b))
+						compteur[i]--;
+				}
+				if(compteur[i] == 0)
+				{
+					Atom c = r1.getConclusion();
+					boolean isInBf = false;
+					for(Atom d : bf.getAtoms())
+					{
+						if(c.equalsA(d))
+							isInBf = true;
+					}
+					if(!isInBf)
+					{
+						ATraiter.add(c);
+						bf.addAtom(c);
+					}
+				}
+			}
+			
 		}
 	}
 	

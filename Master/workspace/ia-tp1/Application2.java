@@ -11,10 +11,11 @@ public class Application2 {
 	 */
 	public static void main(String[] args) throws IOException {
 		KnowledgeBase kb = new KnowledgeBase("fileBase.txt");
-		kb.addFact("Arnaud");
-		kb.addRule(new Rule("Arnaud;Benoit"));
-		System.out.println(kb);
+//		kb.addFact("Arnaud");
+//		kb.addRule(new Rule("Arnaud;Benoit"));
+//		System.out.println(kb);
 		kb.forwardChaning();
+		System.out.println(kb);
 	}
 
 }
