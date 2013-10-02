@@ -17,5 +17,4 @@ public class Application2 {
 		kb.forwardChaning();
 		System.out.println(kb);
 	}
-
 }
