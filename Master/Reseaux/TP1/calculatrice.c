@@ -10,6 +10,9 @@ int calcule(struct req requette)
 {
 	int res = 0;
 
+	//affichage de la requette pour le test
+	printf("%d %d %d\n", requette.op1, requette.type, requette.op2);
+
 	switch(requette.type)
 	{
 		case '+':
@@ -27,10 +30,9 @@ int calcule(struct req requette)
 				res = requette.op1 / requette.op2;
 			break;
 		default:
-			res = 999999999;
+			printf("switch default\n");
 			break;
 	}
-	printf("ça ne fonctinne paaaaaaaaas !!!!!!\n");
 	return res;
 }
 

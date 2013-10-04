@@ -4,7 +4,7 @@
 struct req
 {
 	long etiq;
-	int type;
+	char type;
 	int op1;
 	int op2;
 };

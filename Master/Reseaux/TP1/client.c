@@ -18,7 +18,7 @@ int main(int argc, char const *argv[])
 		id = msgget(cle, IPC_CREAT | 0666);
 
 	struct req requette;
-	requette.etiq = 2;
+	requette.etiq = 1;
 
 	printf("type d'oppération\n");
 	scanf("%c", &requette.type);
