@@ -1,39 +1,35 @@
-patches-own [ counter height-plant grow-now]
+patches-own [ counter height-grass age]
 to setup
   clear-all
   ask patches [ 
-    set counter random 100
-    set height-plant 10
-    set grow-now time-to-grow
+    set counter random time-to-grow
+    set height-grass random 30
+    set age 2
   ]
   reset-ticks
 end
 
-to check-counter
+to grass-grow
   ask patches [
-    if counter = 0 [
-      set pcolor scale-color green height-plant 0 70
-      set counter 100
+    ifelse counter = 0 [
+      set pcolor scale-color green height-grass 0 60
+      set height-grass height-grass + 1
+      set age age - 1
+      set counter time-to-grow
+    ]
+    [ set counter counter - 1 ]
+    if age = 0 [
+      set pcolor black
+      set counter random time-to-grow
+      set height-grass random 30
+      set age 2
     ]
   ]
 end
 
-to plant-grow
-    if grow-now < 0 [
-      set height-plant height-plant + 10
-      set grow-now time-to-grow
-    ]
-    set grow-now grow-now - 10
-    if height-plant >= 100 [
-      set pcolor black
-      set height-plant 10
-    ]
-end
 
 to go
-  check-counter
-  ask patches [ set counter counter - 1 ]
-  ask patches with [ pcolor != black ] [plant-grow]
+  grass-grow
   tick
 end
 @#$#@#$#@
@@ -73,7 +69,7 @@ time-to-grow
 time-to-grow
 50
 10000
-1050
+650
 100
 1
 NIL
@@ -451,7 +447,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 5.0.1
+NetLogo 5.0.4
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
