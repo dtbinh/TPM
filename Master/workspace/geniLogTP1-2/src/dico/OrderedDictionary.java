@@ -1,8 +1,6 @@
 package dico;
 
 public class OrderedDictionary extends AbstractDictionary {
-
-	
 	
 	public OrderedDictionary() {
 		super();
@@ -10,6 +8,10 @@ public class OrderedDictionary extends AbstractDictionary {
 
 	public OrderedDictionary(Object[] key, Object[] value, int compteur) {
 		super(key, value, compteur);
+	}
+	
+	public OrderedDictionary(int taille) {
+		super(taille);
 	}
 
 	@Override
@@ -39,13 +41,6 @@ public class OrderedDictionary extends AbstractDictionary {
 			}
 			keys = tmpKeys;
 			values = tmpValues;
-		}
-		else
-		{
-			int i = 0;
-			while(keys[i] != null)
-				i++;
-			return i;
 		}
 		return compteur;
 	}

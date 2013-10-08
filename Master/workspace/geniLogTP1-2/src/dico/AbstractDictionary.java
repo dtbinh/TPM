@@ -19,6 +19,18 @@ public abstract class AbstractDictionary implements IDictionary{
 		this.compteur = compteur;
 	}
 	
+	public AbstractDictionary(int taille) {
+		//super();
+		this.compteur = 0;
+		this.keys = new Object[taille];
+		this.values = new Object[taille];
+	}
+	
+	public int size()
+	{
+		return compteur;
+	}
+	
 	public Object getOneValue(int index)
 	{
 		return values[index];
