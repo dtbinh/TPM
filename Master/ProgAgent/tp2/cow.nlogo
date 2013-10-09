@@ -1,12 +1,60 @@
 patches-own [ counter height-grass age]
+breed [ cows cow ]
+breed [ bulls bull ]
+
+cows-own [my-bull conso-cow]
+
 to setup
   clear-all
+  
+  set-default-shape turtles "cow"
+  
   ask patches [ 
     set counter random time-to-grow
     set height-grass random 30
     set age 2
   ]
+  
+  create-cows number-cows [
+    set color white
+    setxy random-xcor random-ycor
+    set my-bull nobody
+    set conso-cow conso-cows
+    set size 1
+  ]
+  
+  create-bulls number-bulls [
+    set color red
+    setxy random-xcor random-ycor
+    set size 1
+  ] 
+  
   reset-ticks
+end
+
+
+to wiggle
+  fd 1
+  rt random 50
+  lt random 50
+end
+
+to go-cow
+  wiggle
+  follow-bull
+end
+
+to go-bull
+  wiggle
+end
+
+to follow-bull
+  if my-bull = nobody [
+    set my-bull one-of bulls in-radius 20
+  ]
+  if my-bull != nobody [
+    set heading towards my-bull
+  ]
 end
 
 to grass-grow
@@ -27,10 +75,23 @@ to grass-grow
   ]
 end
 
+to update-plot
+  set-current-plot-pen "herbe"
+  plot sum [height-grass] of patches
+end
+
+to eat-grass
+   set height-grass height-grass - conso-cow
+end
+
 
 to go
   grass-grow
+  ask cows [ go-cow ]
+  ask bulls [ go-bull ]
+  ask cows [ eat-grass ]
   tick
+  update-plot
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -108,6 +169,69 @@ NIL
 NIL
 NIL
 1
+
+SLIDER
+16
+149
+188
+182
+number-cows
+number-cows
+1
+1000
+402
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+18
+199
+190
+232
+number-bulls
+number-bulls
+1
+1000
+7
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+20
+249
+192
+282
+conso-cows
+conso-cows
+1
+20
+2
+1
+1
+NIL
+HORIZONTAL
+
+PLOT
+9
+311
+209
+461
+plot 1
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"herbe" 1.0 0 -16777216 true "" "update-plot"
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -447,7 +571,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 5.0.4
+NetLogo 5.0.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
