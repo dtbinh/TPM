@@ -35,6 +35,17 @@ public class Rule
 		hypothesis.remove(hypothesis.size()-1);
 	}
 	
+	
+	/**
+	 * retourne la liste des termes
+	 * @param 
+	 * @return liste des termes
+	 */
+	public ArrayList<Term> getTerms()
+	{
+		return terms;
+	}
+	
 	/**
 	 * Ajoute un terme a la liste des termes s'il n'existe pas deja.
 	 * @param t le terme a potentiellement ajouter

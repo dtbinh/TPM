@@ -7,6 +7,7 @@ import structure.Atom;
 import structure.FactBase;
 import structure.Rule;
 import structure.RuleBase;
+import structure.Term;
 
 
 public class KnowledgeBase {
@@ -27,14 +28,14 @@ public class KnowledgeBase {
 		
 		String line = readerFile.readLine();
 		
-		System.out.println(line);
+		//System.out.println(line);
 		bf = new FactBase(line);
 		line = readerFile.readLine();
 		//System.out.println(line);
 		br = new RuleBase();
 		while(line != null)
 		{
-			System.out.println(line);
+			//System.out.println(line);
 			Rule r = new Rule(line);
 			br.addRule(r);
 			line = readerFile.readLine();
@@ -122,6 +123,23 @@ public class KnowledgeBase {
 		}
 	}
 	
-	
+	public void instanciation()
+	{
+		ArrayList<Term> constantes = new ArrayList<Term>(bf.getTerms());
+		
+		
+		for(int i = 0; i < br.size(); i++)
+		{
+			ArrayList<Term> terms = new ArrayList<Term>(br.getRule(i).getTerms());
+			for(int j = 0; j < terms.size(); j++)
+			{
+				Term t = terms.get(j);
+				if(t.isConstant() && !constantes.contains(t))
+					constantes.add(t);
+			}
+		}
+		System.out.println(constantes);
+		
+	}
 
 }

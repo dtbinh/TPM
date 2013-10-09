@@ -64,6 +64,14 @@ public class Term
 		return(label.compareTo(t.label));
 	}
 	
+	
+	public boolean equals(Object o)
+	{
+		if(!(o instanceof Term))
+			return false;
+		return equalsT((Term) o);
+	}
+	
 	/**
 	 * Retourne la chaine de caracteres de ce terme
 	 * @return la chaine decrivant le terme 
