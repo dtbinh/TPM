@@ -22,7 +22,4 @@ public class CoupleTerms {
 	public void setTerm2(Term term2) {
 		this.term2 = term2;
 	}
-	
-	
-
 }
