@@ -139,6 +139,12 @@ public class KnowledgeBase {
 			}
 		}
 		System.out.println(constantes);
+		System.out.println("-------------------------------");
+		System.out.println("-------------------------------");
+		ArrayList<Term> e1 = new ArrayList<Term>(br.getRule(0).getTerms());
+		Substitutions s = new Substitutions(e1, constantes);
+		s.generateAllSubstitutions();
+		System.out.println(s);
 		
 	}
 

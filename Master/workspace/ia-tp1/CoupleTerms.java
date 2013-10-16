@@ -22,4 +22,9 @@ public class CoupleTerms {
 	public void setTerm2(Term term2) {
 		this.term2 = term2;
 	}
+	
+	public String toString()
+	{
+		return "("+term1+","+term2+")";
+	}
 }
