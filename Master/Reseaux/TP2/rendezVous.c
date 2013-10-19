@@ -26,9 +26,9 @@ int main(int argc, char const *argv[])
 	semP.sem_flg = 0;
 
 	struct sembuf semZ;
-	semP.sem_num = 0;
-	semP.sem_op = 0;
-	semP.sem_flg = 0;
+	semZ.sem_num = 0;
+	semZ.sem_op = 0;
+	semZ.sem_flg = 0;
 
 
 
