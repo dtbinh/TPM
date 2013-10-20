@@ -2,7 +2,7 @@ package elementDeStockage;
 
 public abstract class ElementStockage {
 	protected String name;
-	protected Dictionary parent;
+	protected Directory parent;
 	
 	public ElementStockage()
 	{
