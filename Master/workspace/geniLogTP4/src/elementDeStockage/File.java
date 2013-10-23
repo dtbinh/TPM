@@ -24,5 +24,10 @@ public class File extends ElementStockage {
 	{
 		System.out.println("contenu du fichier "+name+" : \n"+contenu);
 	}
+	
+	public int nbElement()
+	{
+		return size();
+	}
 
 }
