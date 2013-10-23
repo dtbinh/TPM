@@ -126,7 +126,7 @@ public class KnowledgeBase {
 	public void instanciation()
 	{
 		ArrayList<Term> constantes = new ArrayList<Term>(bf.getTerms());
-		
+		ArrayList<Term> e1 = new ArrayList<Term>();
 		
 		for(int i = 0; i < br.size(); i++)
 		{
@@ -136,16 +136,17 @@ public class KnowledgeBase {
 				Term t = terms.get(j);
 				if(t.isConstant() && !constantes.contains(t))
 					constantes.add(t);
+				else if(!t.isConstant() && !e1.contains(t))
+				{
+					e1.add(t);
+				}
 			}
 		}
-		System.out.println(constantes);
-		System.out.println("-------------------------------");
-		System.out.println("-------------------------------");
-		ArrayList<Term> e1 = new ArrayList<Term>(br.getRule(0).getTerms());
+		System.out.println("constante \n" + constantes);
+		System.out.println("variable \n" + e1);
+		
 		Substitutions s = new Substitutions(e1, constantes);
 		s.generateAllSubstitutions();
-		System.out.println(s);
-		
 	}
 
 }

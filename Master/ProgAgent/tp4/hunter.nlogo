@@ -81,7 +81,6 @@ to go-home
   ]
   [wiggle fd 0.2]
 end
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 210

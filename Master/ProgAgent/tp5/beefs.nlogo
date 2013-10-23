@@ -1,60 +1,32 @@
-patches-own [ counter height-grass age]
-breed [ cows cow ]
-breed [ bulls bull ]
+breed [beefs beef]
+breed [wolfs wolf]
 
-cows-own [my-bull conso-cow]
+beefs-own [energy ctask beefAge]
+patches-own [ counter height-grass age]
+
 
 to setup
   clear-all
-  
-  set-default-shape turtles "cow"
+  ;;__clear-all-and-reset-ticks
+  set-default-shape beefs "cow"
+  ;resize-world -75 75 -75 75
+  ;set-patch-size 5
   
   ask patches [ 
     set counter random time-to-grow
-    set height-grass random 30
+    set height-grass random 40
     set age 2
   ]
   
-  create-cows number-cows [
+  create-beefs numberBeef [
+    set size 2
     set color white
     setxy random-xcor random-ycor
-    set my-bull nobody
-    set conso-cow conso-cows
-    set size 1
+    set energy 1000
+    
+    set ctask "quete-nourriture"
   ]
-  
-  create-bulls number-bulls [
-    set color red
-    setxy random-xcor random-ycor
-    set size 1
-  ]
-  
   reset-ticks
-end
-
-
-to wiggle
-  fd 1
-  rt random 50
-  lt random 50
-end
-
-to go-cow
-  wiggle
-  follow-bull
-end
-
-to go-bull
-  wiggle
-end
-
-to follow-bull
-  if my-bull = nobody [
-    set my-bull one-of bulls in-radius 20
-  ]
-  if my-bull != nobody [
-    set heading towards my-bull
-  ]
 end
 
 to grass-grow
@@ -69,39 +41,70 @@ to grass-grow
     if age = 0 [
       set pcolor black
       set counter random time-to-grow
-      set height-grass random 30
+      set height-grass random 50
       set age 2
     ]
   ]
 end
 
-to update-plot
-  set-current-plot-pen "herbe"
-  plot sum [height-grass] of patches
+to wiggle
+  rt random 50
+  lt random 50
+end
+
+to go-beef
+  ;wiggle
+  fd 1
+  set energy energy - 1
+  if energy < 0 [
+    die
+  ]
+end
+
+to regrouper
+  let target one-of other beefs in-radius distanceMin
+  ifelse target = nobody [
+    set target one-of other beefs in-radius 10
+    if target != nobody [
+      set heading towards target
+    ]
+  ]
+  [
+    set heading towards target rt 180 fd 2
+  ]
+  if energy < energyMin [
+    set ctask "quete-nourriture"
+  ]
+  go-beef
 end
 
 to eat-grass
-   set height-grass height-grass - conso-cow
+   set height-grass height-grass - consomation
+   set energy energy + consomation
 end
 
+to quete-nourriture
+  ifelse pcolor = green and height-grass >= consomation [
+    eat-grass
+    set ctask "regrouper"
+  ]
+  [go-beef]
+end
 
 to go
   grass-grow
-  ask cows [ go-cow ]
-  ask bulls [ go-bull ]
-  ask cows [ eat-grass ]
+  ask beefs [run ctask]
   tick
-  update-plot
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-210
-10
-649
-470
-16
-16
-13.0
+230
+23
+830
+644
+30
+30
+9.67213115
 1
 10
 1
@@ -111,36 +114,21 @@ GRAPHICS-WINDOW
 1
 1
 1
--16
-16
--16
-16
+-30
+30
+-30
+30
 0
 0
 1
 ticks
 30.0
 
-SLIDER
-9
-41
-181
-74
-time-to-grow
-time-to-grow
-50
-10000
-650
-100
-1
-NIL
-HORIZONTAL
-
 BUTTON
-15
-98
-88
-131
+14
+438
+87
+471
 NIL
 setup
 NIL
@@ -155,9 +143,9 @@ NIL
 
 BUTTON
 99
-101
+442
 162
-134
+475
 NIL
 go
 T
@@ -171,67 +159,101 @@ NIL
 1
 
 SLIDER
-16
-149
-188
-182
-number-cows
-number-cows
+13
+29
+185
+62
+numberBeef
+numberBeef
 1
 1000
-402
+116
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-18
-199
-190
-232
-number-bulls
-number-bulls
+17
+77
+189
+110
+DistanceMin
+DistanceMin
 1
-1000
-7
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-20
-249
-192
-282
-conso-cows
-conso-cows
-1
-20
+10
 2
 1
 1
 NIL
 HORIZONTAL
 
-PLOT
-9
-311
-209
-461
-plot 1
+SLIDER
+20
+126
+192
+159
+time-to-grow
+time-to-grow
+1
+10000
+765
+1
+1
 NIL
+HORIZONTAL
+
+SLIDER
+23
+172
+195
+205
+consomation
+consomation
+1
+100
+10
+1
+1
 NIL
-0.0
-10.0
-0.0
-10.0
-true
-false
-"" ""
-PENS
-"herbe" 1.0 0 -16777216 true "" "update-plot"
+HORIZONTAL
+
+SLIDER
+24
+218
+196
+251
+energyMin
+energyMin
+50
+200
+158
+1
+1
+NIL
+HORIZONTAL
+
+MONITOR
+1126
+43
+1231
+88
+number beefs
+count beefs
+17
+1
+11
+
+MONITOR
+1078
+99
+1234
+144
+energy total
+sum [energy] of beefs
+17
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?

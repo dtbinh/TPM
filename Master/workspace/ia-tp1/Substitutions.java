@@ -23,23 +23,29 @@ public class Substitutions {
 	{
 		Substitution s = new Substitution();
 		genererRec(s, 0, 0);
-		System.out.println(listSubs);
+		System.out.println("liste substitution " + listSubs);
 	}
 	
 	public void genererRec(Substitution s, int e1, int e2)
 	{
 		//faire une copie de s
 		if(s.getListCT().size() == E1.size())
+		{
 			listSubs.add(s);
+		}
 		else
 		{
 			Substitution s2 = new Substitution(s);
 			Substitution s3 = new Substitution(s);
-			CoupleTerms ct = new CoupleTerms(E1.get(e1), E2.get(e2));
-			s2.getListCT().add(ct);
-			
-			genererRec(s2, e1+1, e2);
-			genererRec(s3, e1, e2+1);
+
+			if(e1 < E1.size() && e2 < E2.size())
+			{
+				CoupleTerms ct = new CoupleTerms(E1.get(e1), E2.get(e2));
+				s2.getListCT().add(ct);
+				
+				genererRec(s2, e1+1, e2);
+				genererRec(s3, e1, e2+1);
+			}
 		}
 	}
 	
@@ -49,7 +55,7 @@ public class Substitutions {
 		String s = "";
 		for(Substitution sb : listSubs)
 		{
-			s += sb.toString() + "\n";
+			s += (sb.toString() + "\n");
 		}
 		return s;
 	}
