@@ -147,6 +147,23 @@ public class KnowledgeBase {
 		
 		Substitutions s = new Substitutions(e1, constantes);
 		s.generateAllSubstitutions();
+		
+		RuleBase newBr = new RuleBase();
+		for(int i = 0; i < br.size(); i++)
+			newBr.addRule(br.getRule(i));
+		
+		for(int i = 0; i < newBr.size(); i++)
+		{
+			Rule r = newBr.getRule(i);
+			for(int j = 0; j < s.size(); j++)
+			{
+				Substitution s1 = new Substitution(s.getSubstitution(j));
+				for(int k = 0; k < s1.size(); k++)
+				{
+				}
+			}
+		}
+			
 	}
 
 }

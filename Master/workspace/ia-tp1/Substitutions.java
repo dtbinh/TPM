@@ -22,31 +22,36 @@ public class Substitutions {
 	public void generateAllSubstitutions()
 	{
 		Substitution s = new Substitution();
-		genererRec(s, 0, 0);
+		genererRec(s);
 		System.out.println("liste substitution " + listSubs);
 	}
 	
-	public void genererRec(Substitution s, int e1, int e2)
+	public void genererRec(Substitution s)
 	{
 		//faire une copie de s
-		if(s.getListCT().size() == E1.size())
+		if(s.size() == E1.size())
 		{
 			listSubs.add(s);
 		}
 		else
-		{
-			Substitution s2 = new Substitution(s);
-			Substitution s3 = new Substitution(s);
-
-			if(e1 < E1.size() && e2 < E2.size())
+		{			
+			for(int i = 0; i < E2.size(); i++)
 			{
-				CoupleTerms ct = new CoupleTerms(E1.get(e1), E2.get(e2));
-				s2.getListCT().add(ct);
-				
-				genererRec(s2, e1+1, e2);
-				genererRec(s3, e1, e2+1);
+				Substitution tmpS = new Substitution(s);
+				tmpS.getListCT().add(new CoupleTerms(E1.get(tmpS.size()), E2.get(i)));
+				genererRec(tmpS);
 			}
 		}
+	}
+	
+	public int size()
+	{
+		return listSubs.size();
+	}
+	
+	public Substitution getSubstitution(int index)
+	{
+		return listSubs.get(index);
 	}
 	
 	

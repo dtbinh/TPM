@@ -1,6 +1,5 @@
-herbivore('Chevre');cruel('Loup')
-animal(x);carnivore(x)
-animal(x);herbivore(x);mange(x,'Herbe')
+animal('Loup');herbivore('Chevre');cruel('Loup')
+animal(x);cruel(x);carnivore(x)
 animal(x);herbivore(x);mange(x,'Herbe')
 animal(x);animal(y);carnivore(x);herbivore(y);mange(x,y)
 animal(x);carnivore(x);boire(x,'Eau')

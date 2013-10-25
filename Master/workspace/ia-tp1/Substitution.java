@@ -29,6 +29,11 @@ public class Substitution {
 		this.listCT = listCT;
 	}
 	
+	public int size()
+	{
+		return listCT.size();
+	}
+	
 	public String toString()
 	{
 		String s = "";
