@@ -5,40 +5,40 @@ import structure.Term;
 
 public class Substitution {
 	
-	private ArrayList<CoupleTerms> listCT;
+	private ArrayList<CoupleTerms> couplesTermes;
 
 	public Substitution(ArrayList<CoupleTerms> listCT) {
 		listCT = new ArrayList<CoupleTerms>();
-		this.listCT = listCT;
+		this.couplesTermes = listCT;
 	}
 	
 	public Substitution(Substitution s)
 	{
-		listCT = new ArrayList<CoupleTerms>();
-		for(CoupleTerms c : s.listCT)
-			listCT.add(c);
+		couplesTermes = new ArrayList<CoupleTerms>();
+		for(CoupleTerms c : s.couplesTermes)
+			couplesTermes.add(c);
 	}
 
 	public Substitution() {
-		listCT = new ArrayList<CoupleTerms>();
+		couplesTermes = new ArrayList<CoupleTerms>();
 	}
 
 	public ArrayList<CoupleTerms> getListCT() {
-		return listCT;
+		return couplesTermes;
 	}
 
 	public void setListCT(ArrayList<CoupleTerms> listCT) {
-		this.listCT = listCT;
+		this.couplesTermes = listCT;
 	}
 	
 	public int size()
 	{
-		return listCT.size();
+		return couplesTermes.size();
 	}
 	
-	public Term getTerm(Term t)
+	public Term getConstante(Term t)
 	{
-		for(CoupleTerms cp : listCT)
+		for(CoupleTerms cp : couplesTermes)
 		{
 			if(cp.getVariable().equalsT(t))
 			{
@@ -51,7 +51,7 @@ public class Substitution {
 	public String toString()
 	{
 		String s = "";
-		for(CoupleTerms ct : listCT)
+		for(CoupleTerms ct : couplesTermes)
 		{
 			s += ct.toString();
 		}

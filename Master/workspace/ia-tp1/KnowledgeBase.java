@@ -126,7 +126,7 @@ public class KnowledgeBase {
 	public void instanciation()
 	{
 		ArrayList<Term> constantes = new ArrayList<Term>(fb.getTerms());
-		ArrayList<Term> e1 = new ArrayList<Term>();
+		ArrayList<Term> variables = new ArrayList<Term>();
 		
 		for(int i = 0; i < rb.size(); i++)
 		{
@@ -136,73 +136,86 @@ public class KnowledgeBase {
 				Term t = terms.get(j);
 				if(t.isConstant() && !constantes.contains(t))
 					constantes.add(t);
-				else if(!t.isConstant() && !e1.contains(t))
+				else if(!t.isConstant() && !variables.contains(t))
 				{
-					e1.add(t);
+					variables.add(t);
 				}
 			}
 		}
 		
 		System.out.println("constante \n" + constantes);
-		System.out.println("variable \n" + e1);
+		System.out.println("variable \n" + variables);
+		
+		
+		Substitutions s = new Substitutions(variables, constantes);
+		//System.out.println("[test] la substitution: \n"+s);
+		//System.out.println("[constante] "+s.getSubstitution(0).getListCT().get(0).getConstant());
 		
 		RuleBase newRuleBase = new RuleBase();
 		for(int i = 0; i < rb.size(); i++)
 		{
-			Rule r = rb.getRule(i);
-			Substitutions s = new Substitutions(constantes, r.getTerms());
-			s.generateAllSubstitutions();
+	
 			//System.out.println("substitutions r"+i+" "+r+" : \n"+s);
 			for(Substitution sub : s.getSubstitutions())
 			{
-				Rule newRule = new Rule(r);
+				Rule newRule = new Rule(rb.getRule(i));
 				instanciation(newRule, sub);
 				newRuleBase.addRule(newRule);
 				//System.out.println("substitutions r"+i+" "+newRule);
 			}
 		}
 		rb = newRuleBase;
+		System.out.println("nouvelle base de regle: "+rb);
 	}
 	
 	public void instanciation(Rule r, Substitution s)
 	{
-		System.out.println("[test] premiere affichage de la substitution: "+s);
+		//System.out.println("[test] premiere affichage de la substitution: "+s);
+		//System.out.println("[test] premiere affichage de la regle: "+r);
 		//term to constant
 		for(int i = 0; i < r.getTerms().size(); i++)
 		{
 			Term t = r.getTerms().get(i);
+			//System.out.println("[test] premiere affichage de la regle: "+r);
 			if(t.isVariable())
 			{
-				if(s.getTerm(t) == null)
-					System.out.println("[error] regle: "+r+" substitution: "+s);
-				r.getTerms().set(i, s.getTerm(t));
+				r.set(i, s.getConstante(t));
+				//System.out.println("[instanciation] i="+i+" \n regle: "+r.getTerms());
 			}
 		}
-		//hypothese to constant
-		for(Atom a : r.getHypothesis())
-        {
-            for(int i = 0; i < a.getArity() ; i++)
-            {                                
-                if(a.getArgI(i).isVariable() )
-                {
-                        a.setArgI(i, s.getTerm(a.getArgI(i)));
-                }
-            }
-        }
-		//conclusion to constant
-        for(int i = 0 ; i < r.getConclusion().getArity(); i ++)
-        {
-            if( r.getConclusion().getArgI(i).isVariable())
-            {
-                r.getConclusion().setArgI(i, s.getTerm(r.getConclusion().getArgI(i)));
-            }
-        }
+		
+		for(int k = 0; k < r.getHypothesis().size(); k++)
+		{
+			//System.out.println("taille hypo = "+r.getHypothesis().size()+" i = "+k);
+			//System.out.println("[r.getHypothesis()] = "+r.getHypothesis());
+			Atom a = r.getAtomHyp(k);
+			for(int j = 0; j < a.getArgs().size(); j++)
+			{
+				Term t = a.getArgs().get(j);
+				//System.out.println("[test] premiere affichage de la regle: "+r.getTerms());
+				if(t.isVariable())
+				{
+					r.getAtomHyp(k).getArgs().set(j, s.getConstante(t));
+					//System.out.println("[instanciation] i="+i+" \n regle: "+r.getTerms());
+				}
+			}
+			//System.out.println("[r.getHypothesis()] = "+r.getHypothesis());
+		}
+		
+		for(int i = 0; i < r.getConclusion().getArgs().size(); i++)
+		{
+			Term t = r.getConclusion().getArgs().get(i);
+			if(t.isVariable())
+			{
+				r.getConclusion().getArgs().set(i, s.getConstante(t));
+			}
+		}
 	}
 	
 	public void forwardChaningOrdre1()
 	{
 		instanciation();
-		//forwardChaning();
+		forwardChaning();
 	}
 
 }

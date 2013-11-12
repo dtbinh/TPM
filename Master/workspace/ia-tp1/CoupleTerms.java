@@ -6,8 +6,8 @@ public class CoupleTerms {
 	private Term variable;
 		
 	public CoupleTerms(Term term1, Term term2) {
-		this.constant = term1;
-		this.variable = term2;
+		this.variable = term1;
+		this.constant = term2;
 	}
 	
 	public CoupleTerms(CoupleTerms c)
@@ -31,6 +31,6 @@ public class CoupleTerms {
 	
 	public String toString()
 	{
-		return "("+constant+","+variable+")";
+		return "("+variable+","+constant+")";
 	}
 }

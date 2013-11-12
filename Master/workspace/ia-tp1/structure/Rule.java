@@ -141,6 +141,11 @@ public class Rule
 		return conclusion;
 	}
 	
+	public void set(int index, Term t)
+	{
+		terms.set(index, t);
+	}
+	
 	/**
 	 * retourne une description de la regle
 	 * @return la chaine decrivant la regle (suivant l'ecriture habituelle)
