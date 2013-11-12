@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import structure.Term;
+
 
 public class Substitution {
 	
@@ -32,6 +34,18 @@ public class Substitution {
 	public int size()
 	{
 		return listCT.size();
+	}
+	
+	public Term getTerm(Term t)
+	{
+		for(CoupleTerms cp : listCT)
+		{
+			if(cp.getVariable().equalsT(t))
+			{
+				return cp.getConstant();
+			}
+		}
+		return null;
 	}
 	
 	public String toString()

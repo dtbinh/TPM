@@ -35,6 +35,26 @@ public class Rule
 		hypothesis.remove(hypothesis.size()-1);
 	}
 	
+	/**
+	 * Constructeur par copie
+	 * @param rule, de type Rule, est la regle a copier
+	 */
+	public Rule(Rule rule)
+    {
+        this.conclusion = new Atom(rule.getConclusion());
+        this.hypothesis = new ArrayList<Atom>();
+        for(Atom a : rule.getHypothesis())
+        {
+                Atom a2 = new Atom(a);
+                this.hypothesis.add(a2);
+        }
+        this.terms = new ArrayList<Term>();
+        for(Term t : rule.getTerms())
+        {
+                this.terms.add(t);
+        }
+    }
+	
 	
 	/**
 	 * retourne la liste des termes

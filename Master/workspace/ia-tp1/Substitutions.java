@@ -23,7 +23,7 @@ public class Substitutions {
 	{
 		Substitution s = new Substitution();
 		genererRec(s);
-		System.out.println("liste substitution " + listSubs);
+		//System.out.println("liste substitution " + listSubs);
 	}
 	
 	public void genererRec(Substitution s)
@@ -52,6 +52,11 @@ public class Substitutions {
 	public Substitution getSubstitution(int index)
 	{
 		return listSubs.get(index);
+	}
+	
+	public ArrayList<Substitution> getSubstitutions()
+	{
+		return listSubs;
 	}
 	
 	

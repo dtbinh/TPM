@@ -61,6 +61,20 @@ public class Atom
 	}
 	
 	/**
+	 * Constructeur par copie
+	 * @param atom, de type Atom, est l'atome a copier
+	 */
+	public Atom(Atom atom)
+    {
+        this.predicate = atom.getPredicate();
+        args = new ArrayList<Term>();
+        for(Term t : atom.getArgs())
+        {
+                args.add(t);
+        }
+    }
+	
+	/**
 	 * Ajoute le terme 't' a la liste de termes de l'atome, sans autre verification
 	 * @param t le terme a ajouter
 	 */
@@ -103,6 +117,14 @@ public class Atom
 	{
 		return predicate;
 	}
+	
+	/**
+	 * @return la liste de termes de cet atome
+	 */
+	public ArrayList<Term> getArgs()
+    {
+		return args;
+    }
 		
 		
 	/**

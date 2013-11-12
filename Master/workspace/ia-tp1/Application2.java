@@ -18,6 +18,6 @@ public class Application2 {
 		System.out.println(kb);
 		System.out.println("-------------------------------");
 		System.out.println("-------------------------------");
-		kb.instanciation();
+		kb.forwardChaningOrdre1();
 	}
 }

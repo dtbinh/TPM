@@ -2,29 +2,35 @@ import structure.Term;
 
 
 public class CoupleTerms {
-	private Term term1;
-	private Term term2;
+	private Term constant;
+	private Term variable;
 		
 	public CoupleTerms(Term term1, Term term2) {
-		this.term1 = term1;
-		this.term2 = term2;
+		this.constant = term1;
+		this.variable = term2;
 	}
 	
-	public Term getTerm1() {
-		return term1;
+	public CoupleTerms(CoupleTerms c)
+	{
+		this.constant = c.getConstant();
+		this.variable = c.getVariable();
 	}
-	public void setTerm1(Term term1) {
-		this.term1 = term1;
+	
+	public Term getConstant() {
+		return constant;
 	}
-	public Term getTerm2() {
-		return term2;
+	public void setConstant(Term term1) {
+		this.constant = term1;
 	}
-	public void setTerm2(Term term2) {
-		this.term2 = term2;
+	public Term getVariable() {
+		return variable;
+	}
+	public void setVariable(Term term2) {
+		this.variable = term2;
 	}
 	
 	public String toString()
 	{
-		return "("+term1+","+term2+")";
+		return "("+constant+","+variable+")";
 	}
 }
