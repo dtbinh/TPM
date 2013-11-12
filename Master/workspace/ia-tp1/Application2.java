@@ -1,7 +1,5 @@
 import java.io.IOException;
 
-import structure.Rule;
-
 
 public class Application2 {
 

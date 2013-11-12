@@ -5,16 +5,16 @@ import structure.Term;
 
 public class Substitutions {
 
-	ArrayList<Term> variables; //variables
-	ArrayList<Term> constantes; //constantes
-	ArrayList<Substitution> listSubs;
+	ArrayList<Term> variables;
+	ArrayList<Term> constantes;
+	ArrayList<Substitution> substitutions;
 	
 	
 	public Substitutions(ArrayList<Term> e1, ArrayList<Term> e2)
 	{
 		variables = e1;
 		constantes = e2;
-		this.listSubs = new ArrayList<Substitution>();
+		this.substitutions = new ArrayList<Substitution>();
 		generateAllSubstitutions();
 	}
 
@@ -24,7 +24,7 @@ public class Substitutions {
 	{
 		Substitution s = new Substitution();
 		genererRec(s);
-		System.out.println("liste substitution " + listSubs);
+		System.out.println("liste substitution " + substitutions);
 	}
 	
 	public void genererRec(Substitution s)
@@ -32,7 +32,7 @@ public class Substitutions {
 		//faire une copie de s
 		if(s.size() == variables.size())
 		{
-			listSubs.add(s);
+			substitutions.add(s);
 		}
 		else
 		{			
@@ -47,24 +47,24 @@ public class Substitutions {
 	
 	public int size()
 	{
-		return listSubs.size();
+		return substitutions.size();
 	}
 	
 	public Substitution getSubstitution(int index)
 	{
-		return listSubs.get(index);
+		return substitutions.get(index);
 	}
 	
 	public ArrayList<Substitution> getSubstitutions()
 	{
-		return listSubs;
+		return substitutions;
 	}
 	
 	
 	public String toString()
 	{
 		String s = "";
-		for(Substitution sb : listSubs)
+		for(Substitution sb : substitutions)
 		{
 			s += (sb.toString() + "\n");
 		}

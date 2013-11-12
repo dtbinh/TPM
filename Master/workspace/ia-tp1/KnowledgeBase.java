@@ -125,7 +125,10 @@ public class KnowledgeBase {
 	
 	public void instanciation()
 	{
+		//toutes les constantes apparessant dans les regles
 		ArrayList<Term> constantes = new ArrayList<Term>(fb.getTerms());
+		
+		//tous les variables apparessant dans les regles
 		ArrayList<Term> variables = new ArrayList<Term>();
 		
 		for(int i = 0; i < rb.size(); i++)
@@ -146,60 +149,46 @@ public class KnowledgeBase {
 		System.out.println("constante \n" + constantes);
 		System.out.println("variable \n" + variables);
 		
-		
 		Substitutions s = new Substitutions(variables, constantes);
-		//System.out.println("[test] la substitution: \n"+s);
-		//System.out.println("[constante] "+s.getSubstitution(0).getListCT().get(0).getConstant());
 		
 		RuleBase newRuleBase = new RuleBase();
 		for(int i = 0; i < rb.size(); i++)
 		{
-	
-			//System.out.println("substitutions r"+i+" "+r+" : \n"+s);
 			for(Substitution sub : s.getSubstitutions())
 			{
 				Rule newRule = new Rule(rb.getRule(i));
 				instanciation(newRule, sub);
 				newRuleBase.addRule(newRule);
-				//System.out.println("substitutions r"+i+" "+newRule);
 			}
 		}
 		rb = newRuleBase;
-		System.out.println("nouvelle base de regle: "+rb);
 	}
 	
 	public void instanciation(Rule r, Substitution s)
 	{
-		//System.out.println("[test] premiere affichage de la substitution: "+s);
-		//System.out.println("[test] premiere affichage de la regle: "+r);
-		//term to constant
+		//remplace chaque variable de la regle r par la constante correspondant
 		for(int i = 0; i < r.getTerms().size(); i++)
 		{
 			Term t = r.getTerms().get(i);
-			//System.out.println("[test] premiere affichage de la regle: "+r);
 			if(t.isVariable())
 			{
 				r.set(i, s.getConstante(t));
-				//System.out.println("[instanciation] i="+i+" \n regle: "+r.getTerms());
 			}
 		}
 		
+		//a faire aussi pour l'hypothese et la conclusion
+		//voir comment est construit une regle
 		for(int k = 0; k < r.getHypothesis().size(); k++)
 		{
-			//System.out.println("taille hypo = "+r.getHypothesis().size()+" i = "+k);
-			//System.out.println("[r.getHypothesis()] = "+r.getHypothesis());
 			Atom a = r.getAtomHyp(k);
 			for(int j = 0; j < a.getArgs().size(); j++)
 			{
 				Term t = a.getArgs().get(j);
-				//System.out.println("[test] premiere affichage de la regle: "+r.getTerms());
 				if(t.isVariable())
 				{
 					r.getAtomHyp(k).getArgs().set(j, s.getConstante(t));
-					//System.out.println("[instanciation] i="+i+" \n regle: "+r.getTerms());
 				}
 			}
-			//System.out.println("[r.getHypothesis()] = "+r.getHypothesis());
 		}
 		
 		for(int i = 0; i < r.getConclusion().getArgs().size(); i++)
@@ -214,7 +203,9 @@ public class KnowledgeBase {
 	
 	public void forwardChaningOrdre1()
 	{
+		//on instancie les regles d'ordre 1
 		instanciation();
+		//on suite on applique le forward chaning sur la nouvelle base de connaissance qu'on obtient
 		forwardChaning();
 	}
 
