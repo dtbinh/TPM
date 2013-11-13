@@ -1,4 +1,8 @@
+package applications;
+
 import java.io.IOException;
+
+import structure.KnowledgeBase;
 
 
 public class Application2 {

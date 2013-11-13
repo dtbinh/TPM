@@ -1,3 +1,4 @@
+package applications;
 import structure.Atom;
 import structure.FactBase;
 import structure.Rule;

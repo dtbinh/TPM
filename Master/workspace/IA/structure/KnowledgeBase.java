@@ -1,13 +1,9 @@
+package structure;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import structure.Atom;
-import structure.FactBase;
-import structure.Rule;
-import structure.RuleBase;
-import structure.Term;
 
 
 public class KnowledgeBase {

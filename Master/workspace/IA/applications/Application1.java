@@ -1,3 +1,4 @@
+package applications;
 import structure.FactBase;
 import structure.Rule;
 import structure.RuleBase;

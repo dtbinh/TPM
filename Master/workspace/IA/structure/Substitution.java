@@ -1,6 +1,6 @@
+package structure;
 import java.util.ArrayList;
 
-import structure.Term;
 
 
 public class Substitution {

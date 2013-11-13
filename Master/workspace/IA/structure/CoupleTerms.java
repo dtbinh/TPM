@@ -1,4 +1,4 @@
-import structure.Term;
+package structure;
 
 
 public class CoupleTerms {
