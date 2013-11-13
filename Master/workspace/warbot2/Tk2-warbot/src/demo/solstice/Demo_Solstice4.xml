@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+	<!-- A simple creation simulation -->
+<simulation name="Simple Ants" author="G.Beurier and F.Michel" date="06/2010">
+	<environment class="demo.solstice.AntEnvironment" width="100" height="100" torusMode="true"/>
+
+	<pheromone diffusion="0.25" evaporation="0.005" name="nestScent"/>
+	<pheromone diffusion="0.25" evaporation="0.02" name="foodScent"/>
+	<pheromone name="food"/>
+	<!-- <pheromone name="foodStock"/>-->
+	
+	<turtle class="demo.solstice.Ant4" number="500" x="50" y="50"/>
+	
+	<observer class="circleFiller" color="255,0,0" x="50" y="50" radius="3"/>
+	<observer class="pheromone3D" pheromone="foodScent"/>
+	<observer class="demo.solstice.SolsticeObserver"/>
+	<!-- <observer class="viewer2D"/>-->
+	
+	<scheduling>
+		<methodActivator role="viewer" method="display"/>
+		<methodActivator role="observer" method="watch"/>
+		<turtleActivator/>
+		<methodActivator role="world" method="diffusion"/>
+		<methodActivator role="world" method="evaporation"/>
+		
+		<methodActivator role="world" method="updateFood"/>
+		
+	</scheduling>
+	
+</simulation>

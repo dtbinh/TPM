@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config team="Mac Gyver" color="E6E2AF">
+	<icon name="gyver.png"/>
+	<sound name="MacGyver.wav"/>
+	<waragents>
+		<warexplorer name="BrainExplorer.class"/>
+		<warrocketlauncher name="BrainRocketLauncher.class"/>
+		<warbase name="BrainBase.class"/>
+	</waragents>
+</config>

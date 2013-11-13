@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+	<!-- A simple creation simulation -->
+<simulation name="Simple Ants" author="G.Beurier and F.Michel" date="06/2010">
+	<environment width="200" height="200" torusMode="true"/>
+	
+	<pheromone name="food"/>
+	
+	<turtle class="demo.solstice.Ant2" number="500"/>
+	
+	<observer class="viewer2D"/>
+	<observer class="noise" pheromone="food" method="ridged"/> 
+</simulation>

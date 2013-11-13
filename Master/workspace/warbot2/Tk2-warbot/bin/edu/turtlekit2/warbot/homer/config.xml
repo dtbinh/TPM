@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config team="Agathe" color="E8CC06">
+	<icon name="homer.jpg"/>
+	<sound name="homer.wav"/>
+	<waragents>
+		<warexplorer name="BrainExplorer.class"/>
+		<warrocketlauncher name="BrainRocketLauncher.class"/>
+		<warbase name="BrainBase.class"/>
+	</waragents>
+</config>

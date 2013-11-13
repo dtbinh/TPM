@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config team="Dalek" color="BD8D46">
+	<icon name="dalek.png"/>
+	<sound name="Exterminate.wav"/>
+	<waragents>
+		<warexplorer name="BrainExplorer.class"/>
+		<warrocketlauncher name="BrainRocketLauncher.class"/>
+		<warbase name="BrainBase.class"/>
+	</waragents>
+</config>

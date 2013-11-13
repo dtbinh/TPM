@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config team="Perceval" color="FFFFFF">
+	<icon name="perceval.png"/>
+	<sound name="perceval.wav"/>
+	<waragents>
+		<warexplorer name="BrainExplorer.class"/>
+		<warrocketlauncher name="BrainRocketLauncher.class"/>
+		<warbase name="BrainBase.class"/>
+	</waragents>
+</config>

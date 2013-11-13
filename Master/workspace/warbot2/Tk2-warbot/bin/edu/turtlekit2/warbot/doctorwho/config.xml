@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config team="TARDIS" color="046380">
+	<icon name="TARDIS.png"/>
+	<sound name="TARDIS.wav"/>
+	<waragents>
+		<warexplorer name="BrainExplorer.class"/>
+		<warrocketlauncher name="BrainRocketLauncher.class"/>
+		<warbase name="BrainBase.class"/>
+	</waragents>
+</config>

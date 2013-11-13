@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simulation name="Warbot">
+	<environment width="450" height="250" torusMode="true"/>
+	<turtle class="edu.turtlekit2.warbot.controller.Controller" number="1"/>
+	<observer class="edu.turtlekit2.warbot.WarViewer" width="450" height="250"/>
+</simulation>

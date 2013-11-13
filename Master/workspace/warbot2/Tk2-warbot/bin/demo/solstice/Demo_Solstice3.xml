@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+	<!-- A simple creation simulation -->
+<simulation name="Simple Ants" author="G.Beurier and F.Michel" date="06/2010">
+	<environment width="100" height="100" torusMode="true"/>
+	
+	<pheromone name="food"/>
+	<pheromone name="foodStock"/>
+	
+	<turtle class="demo.solstice.Ant3" number="500" x="50" y="50"/>
+	
+	<observer class="viewer2D"/>
+	<observer class="circleFiller" pheromone="food" quantity="400" x="10" y="10" radius="3"/>
+	<observer class="circleFiller" color="255,0,0" x="50" y="50" radius="3"/>
+	
+	<observer class="lineCharter" pheromone="foodStock"/>
+	<observer class="pheromone3D" pheromone="foodStock"/>
+	
+</simulation>
