@@ -1,0 +1,6 @@
+p('C','D'); r('D','A','D')
+p(x,y);q(y,y);r(x,x,y)
+p(x,x);q(x,'B')
+r(x,'A',y);q(x,y)
+q(x,y);q(y,z);p(x,z)
+h('E');p('C','E')

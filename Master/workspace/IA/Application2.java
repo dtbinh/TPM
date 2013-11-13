@@ -8,7 +8,7 @@ public class Application2 {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		KnowledgeBase kb = new KnowledgeBase("premierOrdre.txt");
+		KnowledgeBase kb = new KnowledgeBase("testMichel");
 		kb.forwardChaning();
 		System.out.println(kb);
 		System.out.println("-------------------------------");
