@@ -24,16 +24,6 @@ void * monMatricule(void *par)
 	//traitement
 	struct matricule * tmpMat = (struct matricule *) par;
 
-	// if(tmpMat->chiffre[0] == 9)
-	// {
-	// 	if(tmpMat->chiffre[1] == 9)
-	// 	{
-	// 		if(tmpMat->chiffre[2] == 9)
-	// 		{
-
-	// 		}
-	// 	}
-	// }
 	printf("nouveau matricule: %d%d%d-%c%c%c-%d%d\n",
 		tmpMat->chiffre[0], tmpMat->chiffre[1], tmpMat->chiffre[2],
 		tmpMat->lettre[0], tmpMat->lettre[1], tmpMat->lettre[2],
