@@ -30,6 +30,6 @@ public class BrainBase extends WarBrain{
 			return "create";
 		}
 		
-		return "action";
+		return "idle";
 	}
 }

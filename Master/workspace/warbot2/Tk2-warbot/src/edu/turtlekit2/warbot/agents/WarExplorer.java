@@ -18,14 +18,17 @@ public class WarExplorer extends WarDynamicAgentsAbstract{
 
     private WarBrain								_brain = null;
     public final static int							COST = 2000;
+    public final static int							RADIUS = 50;
+    public final static double						SPEED = 1.2;
+    public final static int							MAX_ENERGY = 6000;
     
     private int										_startX = 0;
     private int										_startY = 0;
     
     public WarExplorer(WarBrain wb){
     	super("action");
-    	_radius = 35;
-    	_energy = 6000;
+    	_radius = RADIUS;
+    	_energy = MAX_ENERGY;
     	_brain = wb;
     }
     
@@ -33,9 +36,9 @@ public class WarExplorer extends WarDynamicAgentsAbstract{
     	super("action");
     	_teamColor = c;
     	_team = team;
-    	_radius = 35;
-    	_energy = 6000;
-    	MAX_HEALTH = 6000;
+    	_radius = RADIUS;
+    	_energy = MAX_ENERGY;
+    	MAX_HEALTH = MAX_ENERGY;
     	_startX = startX;
     	_startY = startY;
     	_brain = wb;
@@ -83,7 +86,7 @@ public class WarExplorer extends WarDynamicAgentsAbstract{
         
         if(retour.equals("move")){
         	if(!isBlocked()){
-            	fd(1);
+            	fd(SPEED);
             }
         }else if(retour.equals("take")){
         	takeFood();

@@ -57,9 +57,9 @@ public class SingletonAffichage{
 	public void refreshScreen(Graphics g, int id,int taille){
 		if(_id == id){
 			g.setColor(Color.white);
-			g.fillRect(0, 0, 500*taille, 300*taille);
+			g.fillRect(0, 0, WarViewer.XSIM*taille, WarViewer.YSIM*taille);
 			g.setColor(Color.black);
-			g.drawRect(0, 0, 500*taille, 300*taille);
+			g.drawRect(0, 0, WarViewer.XSIM*taille+4, WarViewer.YSIM*taille+4);
 		}
 	}
 }

@@ -64,6 +64,8 @@ public class Controller extends Turtle {
     protected List<String> 							_listRole = null;
     private String									_victoryTeam = "";
     private JFrame									_resultDialog;
+    public String									version="1.2";
+    public String									date="15/12/2013";
 
     private static WarLauncher wl;
 
@@ -78,16 +80,16 @@ public class Controller extends Turtle {
 	 */
 	@SuppressWarnings("deprecation")
 	public void setup(){
-		System.out.println("gna");
+		System.out.println("Warbot II : v"+version+" du "+date);
     	playRole("Controller");
-    	System.out.println("gno");
+    //	System.out.println("gno");
 
         setHidden(true);
-        System.out.println("gni");
+   //     System.out.println("gni");
         joinGroup(String.valueOf("admin"));
-        System.out.println("gne");
+   //     System.out.println("gne");
         requestRole("admin", "WarExplorer", null);
-        System.out.println("groumpf");
+   //     System.out.println("groumpf");
     }
 	
 	@Override
@@ -113,11 +115,8 @@ public class Controller extends Turtle {
 		} catch (IOException e) {
 			System.exit(0);
 		}
-		System.out.println("gne");
 		wl = new WarLauncher();
-		System.out.println("gne");
         wl.setVisible(true);
-        System.out.println("gne");
         
         while(_boucle){
             try {
@@ -336,6 +335,8 @@ public class Controller extends Turtle {
 		Iterator<String> i = listeNomEquipe.iterator();
 		int team = 0;
 		
+		System.out.println("Noms Žquipes: "+listeNomEquipe);
+		
 		while(i.hasNext()){
 			String t = i.next();
 			
@@ -348,7 +349,7 @@ public class Controller extends Turtle {
 			for(int j = 0 ; j < _simulationOption.getNbExplorer() ; j++){
 				try {
 					WarBrain monBrain = (WarBrain) _listeTeam.get(t).getClasse("warexplorer").getConstructor().newInstance();
-					Turtle turtle = (WarDynamicAgentsAbstract) new WarExplorer(t, (team == 0) ? 50 : (WarViewer.XSIM - 50), (team == 0) ? 50 : (WarViewer.YSIM - 50), monBrain, (team == 0) ? Color.RED : Color.GREEN);
+					Turtle turtle = (WarDynamicAgentsAbstract) new WarExplorer(t, (team == 0) ? 50 : (WarViewer.XSIM - 50), (team == 0) ? 50 : (WarViewer.YSIM - 50), monBrain, (team == 0) ? Color.RED : Color.BLUE);
 					createTurtle(turtle);
 				} catch (InstantiationException e) {
 					/*System.out.println("Erreur 1 "+*/e.printStackTrace()/*)*/;
@@ -362,7 +363,7 @@ public class Controller extends Turtle {
 			for(int j = 0 ; j < _simulationOption.getNbRocketLauncher() ; j++){
 				try {
 					WarBrain monBrain = (WarBrain) _listeTeam.get(t).getClasse("warrocketlauncher").getConstructor().newInstance();
-					Turtle turtle = (WarDynamicAgentsAbstract) new WarRocketLauncher(t, (team == 0) ? 50 : (WarViewer.XSIM - 50), (team == 0) ? 50 : (WarViewer.YSIM - 50), monBrain, (team == 0) ? Color.RED : Color.GREEN);
+					Turtle turtle = (WarDynamicAgentsAbstract) new WarRocketLauncher(t, (team == 0) ? 50 : (WarViewer.XSIM - 50), (team == 0) ? 50 : (WarViewer.YSIM - 50), monBrain, (team == 0) ? Color.RED : Color.BLUE);
 					createTurtle(turtle);
 				} catch (InstantiationException e) {
 					/*System.out.println("Erreur 1 "+*/e.printStackTrace()/*)*/;
@@ -379,7 +380,9 @@ public class Controller extends Turtle {
 					HashMap<String, Class> tmp = new HashMap<>(_listeTeam.get(t).getClasses());
 					tmp.remove("base");
 					WarBrain monBrain = (WarBrain) _listeTeam.get(t).getClasse("warbase").getConstructor().newInstance();
-					Turtle turtle = (WarDynamicAgentsAbstract) new WarBase(t, (team == 0) ? (Math.random()*50) : (WarViewer.XSIM - (Math.random()*50)), (team == 0) ? (Math.random()*50) : (WarViewer.YSIM - (Math.random()*50)), monBrain, tmp, (team == 0) ? Color.RED : Color.GREEN);
+					Turtle turtle = (WarDynamicAgentsAbstract) new WarBase(t, (team == 0) ? (Math.random()*50) : (WarViewer.XSIM - (Math.random()*50)), 
+																			  (team == 0) ? (Math.random()*50) : (WarViewer.YSIM - (Math.random()*50)), 
+																			   monBrain, tmp, (team == 0) ? Color.RED : Color.BLUE);
 					createTurtle(turtle);
 				} catch (InstantiationException e) {
 					/*System.out.println("Erreur 1 "+*/e.printStackTrace()/*)*/;

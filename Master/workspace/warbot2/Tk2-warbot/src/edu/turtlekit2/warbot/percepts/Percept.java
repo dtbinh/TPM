@@ -15,14 +15,17 @@ public class Percept {
 	private String							_team = "";
 	private String							_type = "";
 	private int								_energy = 0;
+	private double							_heading = 0.0;
 	
 	
-	public Percept(int angle, int distance, int id, String team, String type, int energy){
+	public Percept(int angle, int distance, int id, String team, String type, int energy, double heading){
 		_angle = angle;
 		_distance = distance;
 		_id = id;
 		_team = team;
 		_type = new String(type);
+		_heading = heading;
+		_energy = energy;
 	}
 
 	/**
@@ -43,6 +46,15 @@ public class Percept {
 	 */
 	public int getDistance() {
 		return _distance;
+	}
+	
+	/**
+	 * Methode retournant la direction dans laquelle avance l'agent perçu a cet instant.
+	 * 
+	 * @return {@code double} - la direction dans laquelle avance l'agent perçu
+	 */
+	public double getHeading(){
+		return _heading;
 	}
 
 	/**

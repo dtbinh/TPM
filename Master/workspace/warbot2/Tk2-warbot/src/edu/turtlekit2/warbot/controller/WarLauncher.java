@@ -253,8 +253,8 @@ public class WarLauncher extends javax.swing.JFrame {
         teamTable.getColumnModel().getColumn(2).setPreferredWidth(50);
         teamTable.getColumnModel().getColumn(2).setMaxWidth(50);
 
-        explorerSlider.setMaximum(20);
-        explorerSlider.setMinimum(1);
+        explorerSlider.setMaximum(9);
+        explorerSlider.setMinimum(0);
         explorerSlider.setValue(5);
         explorerSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -271,8 +271,8 @@ public class WarLauncher extends javax.swing.JFrame {
 
         jLabel1.setText("Nombre explorer :");
 
-        rocketSlider.setMaximum(20);
-        rocketSlider.setMinimum(1);
+        rocketSlider.setMaximum(9);
+        rocketSlider.setMinimum(0);
         rocketSlider.setValue(5);
         rocketSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -287,9 +287,9 @@ public class WarLauncher extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("Nombre rocket Launcher :");
+        jLabel3.setText("Nombre Launcher :");
 
-        baseSlider.setMaximum(5);
+        baseSlider.setMaximum(4);
         baseSlider.setMinimum(1);
         baseSlider.setValue(1);
         baseSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -371,8 +371,8 @@ public class WarLauncher extends javax.swing.JFrame {
                         .addGroup(panelMode1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(foodSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(baseSlider, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
-                            .addComponent(rocketSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(explorerSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                            .addComponent(rocketSlider, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(explorerSlider, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         panelMode1Layout.setVerticalGroup(

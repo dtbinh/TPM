@@ -19,16 +19,21 @@ public class WarRocket extends WarDynamicAgentsAbstract {
 	
 	public static final int 				COST = 200;
 	public static final int					DAMAGE = 500;
+	public static final double				SPEED = 3.0;
+	public static final int					AUTONOMY = 23;
+	public static final int					RADIUS = 6;
 	
 	private int								_autonomy = 0;
 	private int								_angle = 0;
+	private WarDynamicAgentsAbstract		_shooter=null;
 
-	public WarRocket(int angle, String team) {
+	public WarRocket(int angle, String team, WarDynamicAgentsAbstract shooter) {
 		super("action");
-		_radius = 10;
+		_radius = RADIUS;
 		_angle = angle;
 		_team = team;
-		_autonomy = 20;
+		_shooter = shooter;
+		_autonomy = AUTONOMY;
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -64,7 +69,7 @@ public class WarRocket extends WarDynamicAgentsAbstract {
 			die();
 		}else{
 			if(!isBlocked()){
-				fd(3);
+				fd(SPEED);
 			}else{
 				SingletonAffichage.getInstance(mySelf()).releaseRefresh();
 				die();
@@ -94,7 +99,8 @@ public class WarRocket extends WarDynamicAgentsAbstract {
 			for(int k = 0 ; k < tmp.size() ; k++){
 				if(tmp.get(k) instanceof WarDynamicAgentsAbstract){
 					WarDynamicAgentsAbstract t = (WarDynamicAgentsAbstract) tmp.get(k);
-					if(getDistance(xcor(), t.xcor(), ycor(), t.ycor()) < _radius && !t.getTeam().equals(_team)){
+					if((t != _shooter) && getDistance(xcor(), t.xcor(), ycor(), t.ycor()) < _radius && !t.getTeam().equals(_team)){
+							// (!t.getTeam().equals(_team) || AUTONOMY-_autonomy > 1 + (_radius/SPEED))){  // old: || (_autonomy-AUTONOMY) <= _radius/SPEED)
 						retour.add(t);
 					}
 				}

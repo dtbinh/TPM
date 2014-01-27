@@ -16,6 +16,7 @@ import edu.turtlekit2.warbot.controller.PanelControl;
 public class WarFood extends WarPassiveAgentsAbstract {
 	
 	public static final int							MAX_DISTANCE_TAKE = 5;
+	public static final int							ENERGY = 200;
 
 	public WarFood() {
 		super("idle");

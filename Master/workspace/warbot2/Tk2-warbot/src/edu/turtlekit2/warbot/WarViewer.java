@@ -32,7 +32,7 @@ public class WarViewer extends Viewer{
 		if(XSIM == 0){
 			XSIM = Integer.parseInt(getParam("width"));
 			YSIM = Integer.parseInt(getParam("height"));
-			System.out.println(XSIM+"  -  "+YSIM);
+			System.out.println("Taille de l'environnement: " + XSIM+"  -  "+YSIM);
 		}
 		
 		int xCor;

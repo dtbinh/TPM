@@ -68,8 +68,18 @@ public class WarMessage{
 	 * Methode renvoyant le type de l'agent envoyeur du message.
 	 * 
 	 * @return {@code String} - le type de l'agent envoyeur du message
+	 * @deprecated
 	 */
 	public String getType(){
+		return _type;
+	}
+	/**
+	 * Methode renvoyant le type de l'agent envoyeur du message.
+	 * 
+	 * @return {@code String} - le type de l'agent envoyeur du message
+	 */
+	
+	public String getSenderType(){
 		return _type;
 	}
 	
@@ -79,6 +89,15 @@ public class WarMessage{
 	 * @return {@code String} - le message envoye.
 	 */
 	public String getMessage(){
+		return _message;
+	}
+	
+	/**
+	 * Methode permettant de recuperer le message envoye.
+	 * 
+	 * @return {@code String} - le message envoye.
+	 */
+	public String getPerformative(){
 		return _message;
 	}
 	
