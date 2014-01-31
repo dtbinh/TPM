@@ -8,7 +8,7 @@ int main(int argc, char **argv)
   
 	if(argc != 2) 
 	{
-		printf("Usage: ImageIn.ppm\n"); 
+		printf("Usage: ImageIn.pgm\n"); 
 		return 1;
 	}
 	sscanf (argv[1],"%s",cNomImgLue);
@@ -22,22 +22,22 @@ int main(int argc, char **argv)
 
 	for(int i = 0; i < 256; ++i)
 	{
-		int occurenceR = 0;
-		int occurenceG = 0;
-		int occurenceB = 0;
-		for(int y = 0; y < imIn.getHeight(); ++y)
+		int occurence = 0;
+		for(int x = 0; x < imIn.getHeight(); ++x)
 		{
-			for(int x = 0; x < imIn.getWidth(); ++x)
+			for(int y = 0; y < imIn.getWidth(); ++y)
 			{
-				if(imIn[y*3][x*3+0] == i) // R
-					occurenceR++;
-				if(imIn[y*3][x*3+1] == i) // G
-					occurenceG++;
-				if(imIn[y*3][x*3+2] == i) // B
-					occurenceB++;
+				//seuillage 2 partie
+				/*
+				if (imIn[x][y] < S) 
+					imOut[x][y] = 0;
+				else imOut[x][y] = 255;
+				*/
+				if(imIn[x][y] == i)
+					occurence++;
 			}
 		}
-		printf("%d %d %d %d\n", i, occurenceR, occurenceG, occurenceB);
+		printf("%d %d\n", i, occurence);
 	}
 
 	return 0;
