@@ -153,42 +153,18 @@ void render_scene()
   //  Nous créons ici un polygone. Nous pourrions aussi créer un triangle ou des lignes. Voir ci-dessous les parties 
   // en commentaires (il faut commenter le bloc qui ne vous intéresse pas et décommenter celui que vous voulez tester.
 
-   // Création de deux lignes
-	glBegin(GL_LINES);
-		glVertex3f(-1, -1, 0);
-		glVertex3f(1, 1, 0);
-		//glVertex3f(1, -1, 0);
-		//glVertex3f(-1, 1, 0); 
-	glEnd();
+  Point p1 = Point(1.5, 0.0, 0.0); //point a projeter
+  Point p2 = Point(1, 1, 0); //point du vecteur
+  Point p3 = Point(-1, -1, 0); //point du vecteur
+  Vector v1 = Vector(-1, -1, 0); //vecteur sur lequel on projete le point p1
 
-  
-  glPointSize(10);
-
-  glBegin(GL_POINTS);
-    Point point1 = Point(1.5, 0.0, 0.0);
-    Point point2 = point1.projectOnLine(Point(-1, -1, 0), Point(1, 1, 0));
-    glColor3f(0.0, 0.2, 0.5);
-    glVertex3f(point1.getX(), -point1.getY(), point1.getZ());
-    glColor3f(0.5, 0.2, 0.0);
-    glVertex3f(point2.getX(), point2.getY(), point2.getZ());
-  glEnd();
-  
-  /**
-  Point p1 = Point(-1.0, 0.0, 0.0);
-  Vector v = Vector(1.0, -1.0, 0.0);
   drawPoint(p1);
-  drawVector(p1, v);
+  drawVector(p2, v1);
+  Point pointOnLine = p1.projectOnLine(p2, p3); //on recupere le point projeté sur le vecteur
+  glColor3f(0.5, 0.2, 0.0); //on change la couleur
+  drawPoint(pointOnLine); //et on l'affiche
 
-  Point p2 = Point(-0.5, 0.8, 0.0);
-  drawPoint(p2);
 
-  Point p3 = p1.projectOnLine(p2, v);
-  glColor3f(0.0, 0.2, 0.5);
-  drawPoint(p3);
-*/
-
-  //Point point2 = point1.projectOnLine(Point(-1, -1, 0), Point(1, 1, 0));
-  
  // création d'un polygone
 /*	glBegin(GL_POLYGON);
 		glVertex3f(-1, -1, 0);
@@ -207,8 +183,6 @@ void render_scene()
 		glVertex3f(1, 1, 0);
 	glEnd();
 */
-
-
 
 }
 
