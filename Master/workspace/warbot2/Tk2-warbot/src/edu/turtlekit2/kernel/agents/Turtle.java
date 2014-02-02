@@ -273,6 +273,11 @@ public class Turtle extends AbstractAgent implements ReferenceableAgent
 		moveTo(x+angleCos*nb,y+angleSin*nb);
 	}
 	
+	public  void fd(final double nb)
+	{
+		moveTo(x+angleCos*nb,y+angleSin*nb);
+	}
+	
 	
 	/**Get the next patch given the current heading*/
 	public  Patch nextPatch(){

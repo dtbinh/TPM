@@ -20,6 +20,8 @@ public class WarBase extends WarDynamicAgentsAbstract {
 
     private WarBrain								_brain = null;
     public final static int							COST = 12000;
+    public final static int							RADIUS = 80;
+    public final static int							MAX_ENERGY = 12000;
     private String									_futurAgent = "";
     @SuppressWarnings("rawtypes")
 	private HashMap<String, Class>					_listeTeam = null;
@@ -29,8 +31,8 @@ public class WarBase extends WarDynamicAgentsAbstract {
 
     public WarBase(String team){
         super("action");
-        _radius = 70;
-        _energy = 12000;
+        _radius = RADIUS;
+        _energy = MAX_ENERGY;
         _team = team;
     }
     
@@ -39,9 +41,9 @@ public class WarBase extends WarDynamicAgentsAbstract {
     	super("action");
     	_teamColor = c;
     	_team = team;
-    	_radius = 35;
-    	_energy = 12000;
-    	MAX_HEALTH = 12000;
+    	_radius = RADIUS;
+    	_energy = MAX_ENERGY;
+    	MAX_HEALTH = MAX_ENERGY;
     	_startX = (int) d;
     	_startY = (int) e;
     	_brain = wb;

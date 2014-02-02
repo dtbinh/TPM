@@ -75,6 +75,16 @@ public abstract class WarDynamicAgentsAbstract extends WarAgentsAbstract{
 	}
 	
 	/**
+	 * Methode permettant connaitre la taille courante du sac.
+	 * 
+	 * @return {@code boolean} - true si le sac est plein sinon false
+	 */
+	public int sizeBag() {
+		return _bag;
+	}
+	
+	
+	/**
 	 * Methode permettant de connaitre l'energie maximale
 	 * que peut avoir un agent "dynamic".
 	 * 
@@ -119,7 +129,7 @@ public abstract class WarDynamicAgentsAbstract extends WarAgentsAbstract{
 	protected void eatFood(){
 		if(_bag > 0){
 			removeFood();
-			_energy+=200;
+			_energy+=WarFood.ENERGY;
 		}
 	}
 	
@@ -157,7 +167,8 @@ public abstract class WarDynamicAgentsAbstract extends WarAgentsAbstract{
 			for(int k = 0 ; k < tmp.size() ; k++){
 				if(tmp.get(k) instanceof WarDynamicAgentsAbstract){
 					WarDynamicAgentsAbstract t = (WarDynamicAgentsAbstract) tmp.get(k);
-					Percept p = new Percept(getAngle(xcor(), t.xcor(), ycor(), t.ycor()), getDistance(xcor(), t.xcor(), ycor(), t.ycor()), t.mySelf(), t.getTeam(), t.getType(), t.getEnergy());
+					Percept p = new Percept(getAngle(xcor(), t.xcor(), ycor(), t.ycor()), getDistance(xcor(), t.xcor(), ycor(), t.ycor()), 
+							t.mySelf(), t.getTeam(), t.getType(), t.getEnergy(), t.getHeading());
 					if (p.getDistance()<=radius && p.getId() != mySelf()){
 						
 						if(PanelControl.isInfoLogViewerChecked()){
@@ -168,7 +179,8 @@ public abstract class WarDynamicAgentsAbstract extends WarAgentsAbstract{
 					}
 				}else{
 					WarPassiveAgentsAbstract t = (WarPassiveAgentsAbstract) tmp.get(k);
-					Percept p = new Percept(getAngle(xcor(), t.xcor(), ycor(), t.ycor()), getDistance(xcor(), t.xcor(), ycor(), t.ycor()), t.mySelf(), "", t.getType(), 0);
+					Percept p = new Percept(getAngle(xcor(), t.xcor(), ycor(), t.ycor()), 
+							getDistance(xcor(), t.xcor(), ycor(), t.ycor()), t.mySelf(), "", t.getType(), 0, t.getHeading());
 					if (p.getDistance()<=radius && p.getId() != mySelf()){
 						
 						if(PanelControl.isInfoLogViewerChecked()){
@@ -218,13 +230,13 @@ public abstract class WarDynamicAgentsAbstract extends WarAgentsAbstract{
 	public boolean isBlocked(){
 		boolean retour = false;
 
-		if(getHeading() > 0 && getHeading() < 180 && ycor() > (WarViewer.YSIM-2)){
+		if(getHeading() >= 0 && getHeading() <= 180 && ycor() >= (WarViewer.YSIM-2)){
 			retour = true;
-		}else if(getHeading() > 90 && getHeading() < 270 && xcor() < 2){
+		}else if(getHeading() >= 90 && getHeading() <= 270 && xcor() <= 2){
 			retour = true;
-		}else if(getHeading() > 180 && getHeading() < 360 && ycor() < 2){
+		}else if(getHeading() >= 180 && getHeading() < 360 && ycor() <= 2){
 			retour = true;
-		}else if(((getHeading() > 270 && getHeading() < 360) || (getHeading() > -1 && getHeading() < 90)) && xcor() > (WarViewer.XSIM-2)){
+		}else if(((getHeading() >= 270 && getHeading() <= 360) || (getHeading() >= -1 && getHeading() < 90)) && xcor() >= (WarViewer.XSIM-2)){
 			retour = true;
 		}
 
@@ -318,7 +330,7 @@ public abstract class WarDynamicAgentsAbstract extends WarAgentsAbstract{
 
 		angle = (int) Math.toDegrees(radian);
 
-		return angle;
+		return angle%360;
 	}
 
 	/**
@@ -459,7 +471,7 @@ public abstract class WarDynamicAgentsAbstract extends WarAgentsAbstract{
      */
 	public void broadcastMessage(String unite, String message, String[] content){
 		WarMessageTMP m = new WarMessageTMP(xcor(), ycor(), mySelf(), getTeam(), getType(), message, content);
-		if(!unite.equals("all")){
+		if (!(unite == null || unite.equals("all"))){
 			broadcastMessage(getMyGroups()[0], unite, m);
 		}else{
 			List<String> list = getListRole();

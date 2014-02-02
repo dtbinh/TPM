@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config team="nothing" color="BD8D46">
+	<icon name="dalek.png"/>
+	<waragents>
+		<warexplorer name="BrainExplorer.class"/>
+		<warrocketlauncher name="BrainRocketLauncher.class"/>
+		<warbase name="BrainBase.class"/>
+	</waragents>
+</config>

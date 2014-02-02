@@ -19,9 +19,13 @@ import edu.turtlekit2.warbot.waritems.WarRocket;
 public class WarRocketLauncher extends WarDynamicAgentsAbstract {
 	
 	public static final int							TIC_TO_RELOAD = 50;
+	public static final double 						SPEED=0.8;
+    public final static int							RADIUS = 30;
+    public final static int							MAX_ENERGY = 8000;
 	
 	private WarBrain								_brain = null;
 	public final static int					    	COST = 3000;
+	public final static int							COST_SHOOT = 200;
 	private int										_turretHead = 0;
 	private int 									_reloadTime = 0;
 	
@@ -33,17 +37,17 @@ public class WarRocketLauncher extends WarDynamicAgentsAbstract {
 
 	public WarRocketLauncher(WarBrain wb) {
 		super("action");
-		 _radius = 30;
-         _energy = 8000;
+		 _radius = RADIUS;
+         _energy = MAX_ENERGY;
          _brain = wb;
 	}
 
 	public WarRocketLauncher(String team, int startX, int startY, WarBrain wb, Color c) {
 		super("action");
 		_teamColor = c;
-		_radius = 30;
-	    _energy = 8000;
-	    MAX_HEALTH = 8000;
+		_radius = RADIUS;
+	    _energy = MAX_ENERGY;
+	    MAX_HEALTH = MAX_ENERGY;
 	    _team = team;
 	    _startX = startX;
 	    _startY = startY;
@@ -82,10 +86,10 @@ public class WarRocketLauncher extends WarDynamicAgentsAbstract {
      */
     private void buildAndShoot(){
     	if(_energy > WarRocket.COST){
-	    	_energy -= 200;
+	    	_energy -= COST_SHOOT;
 	    	Turtle tmp;
 	    	//System.out.println("1");
-			tmp = new WarRocket(_turretHead, getTeam());
+			tmp = new WarRocket(_turretHead, getTeam(),this);
 			//System.out.println("2");
 			SingletonAffichage.getInstance(mySelf()).initRefresh(createTurtle(tmp));
 			//System.out.println("3");
@@ -108,7 +112,7 @@ public class WarRocketLauncher extends WarDynamicAgentsAbstract {
         
         if(retour.equals("move")){
         	if(!isBlocked()){
-            	fd(1);
+            	fd(SPEED);
             }
         }else if (retour.equals("fire") && _rocketOK){
         	buildAndShoot();

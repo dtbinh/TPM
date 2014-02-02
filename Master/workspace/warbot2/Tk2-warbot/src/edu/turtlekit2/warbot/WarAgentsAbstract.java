@@ -89,6 +89,7 @@ public abstract class WarAgentsAbstract extends Turtle{
 			System.out.println("Erreur de recuperation des roles");
 		}
 		_listRole.add("WarFood");
+		_listRole.add("WarRocket");
 	}
     
     /**

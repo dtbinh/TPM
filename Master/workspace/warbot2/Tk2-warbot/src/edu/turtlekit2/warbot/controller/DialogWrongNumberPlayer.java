@@ -40,11 +40,11 @@ public class DialogWrongNumberPlayer extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Mauvais nombre de joueurs s√©l√©ctionn√©.");
+        jLabel1.setText("Mauvais nombre de joueurs sélectionnés.");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Veuillez en s√©lectionner seulement 2.");
+        jLabel2.setText("Veuillez en sélectionner 2.");
 
         ok.setText("OK");
         ok.addActionListener(new java.awt.event.ActionListener() {

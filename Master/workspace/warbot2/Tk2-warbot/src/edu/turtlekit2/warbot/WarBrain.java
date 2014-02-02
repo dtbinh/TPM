@@ -114,6 +114,15 @@ public abstract class WarBrain {
 	}
 	
 	/**
+	 * Methode permettant de connaitre le nombre d'Žlements dans le sac
+	 * 
+	 * @return {@code boolean} - true si le sac est vide sinon false
+	 */
+	public int sizeBag(){
+		return _agent.sizeBag();
+	}
+	
+	/**
 	 * Methode permettant de savoir si le sac de ressource est plein.
 	 * 
 	 * @return {@code boolean} - true si le sac est plein sinon false
