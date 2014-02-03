@@ -12,6 +12,7 @@
 #include <stdio.h>      
 #include <stdlib.h>     
 #include <math.h>
+#include <iostream>
 
 
 /* Dans les salles de TP, vous avez généralement accès aux glut dans C:\Dev. Si ce n'est pas le cas, téléchargez les .h .lib ...
@@ -22,6 +23,8 @@ Si vous mettez glut dans le répertoire courant, on aura alors #include "glut.h"
 #include <GL/glut.h> 
 #include "Vector.h"
 #include "Point.h"
+
+using namespace std;
 
 // Définition de la taille de la fenêtre
 #define WIDTH  480
@@ -48,6 +51,13 @@ GLvoid window_key(unsigned char key, int x, int y);
 
 void drawPoint(const Point& p);
 void drawVector(const Point& p, const Vector& v);
+void drawSegment(const Point& p1, const Point& p2);
+void drawCurve(const Point* tabPointsOfCurve, const long& nbPoints);
+void hermiteCubicCurve(Point p0, Point p1, Vector v0, Vector v1, long nbU, Point* tab);
+
+void bezierCurveByBernstein(Point* tabControlPoint, long nbControlPoint, long nbU, Point* tab);
+int fact(int n);
+
 
 
 int main(int argc, char **argv) 
@@ -153,7 +163,21 @@ void render_scene()
   //  Nous créons ici un polygone. Nous pourrions aussi créer un triangle ou des lignes. Voir ci-dessous les parties 
   // en commentaires (il faut commenter le bloc qui ne vous intéresse pas et décommenter celui que vous voulez tester.
 
-  Point p1 = Point(1.5, 0.0, 0.0); //point a projeter
+
+  //dessin d'un repere
+  drawPoint(Point(0, 0, 0));
+  glColor3f(0, 1.0, 0);
+  drawVector(Point(0, 0, 0), Vector(0, 0.5, 0));
+  glColor3f(0, 1.0, 0);
+  drawVector(Point(0, 0, 0), Vector(0.5, 0, 0));
+  //fin du repere
+
+
+  //tp1
+  /*
+  glColor3f(1.0, 1.0, 1.0);
+
+  Point p1 = Point(-1, -1.5, 0.0); //point a projeter
   Point p2 = Point(1, 1, 0); //point du vecteur
   Point p3 = Point(-1, -1, 0); //point du vecteur
   Vector v1 = Vector(-1, -1, 0); //vecteur sur lequel on projete le point p1
@@ -161,9 +185,43 @@ void render_scene()
   drawPoint(p1);
   drawVector(p2, v1);
   Point pointOnLine = p1.projectOnLine(p2, p3); //on recupere le point projeté sur le vecteur
+  drawSegment(p2, pointOnLine);
   glColor3f(0.5, 0.2, 0.0); //on change la couleur
   drawPoint(pointOnLine); //et on l'affiche
+  */
 
+
+  //tp2
+  // Point tabPointsOfCurve[4] = {Point(-.5, -1, 0), Point(-1, 1, 0), Point(1, 1, 0), Point(1, -1, 0)};
+  // drawCurve(tabPointsOfCurve, 4);
+
+
+  Point p0 = Point(0.0, 0.0, 0.0);
+  Point p1 = Point(2.0, 0.0, 0.0);
+  Vector v0 = Vector(1.0, 1.0, 0.0);
+  Vector v1 = Vector(1.0, -1.0, 0.0);
+  long nbU = 50;
+  Point tab[nbU];
+
+  //hermiteCubicCurve(p0, p1, v0, v1, nbU, tab);
+  //drawCurve(tab, nbU);
+
+  //tp2 exercice2
+  long nbControlPoint = 6;
+  Point tabControlPoint[nbControlPoint];
+  tabControlPoint[0] = Point(-1.0, 0.0, 0.0);
+  tabControlPoint[1] = Point(-0.5, 0.7, 0.0);
+  tabControlPoint[2] = Point(0.0, 1.0, 0.0);
+  tabControlPoint[3] = Point(0.0, 0.0, 0.0);
+  tabControlPoint[4] = Point(0.5, -0.7, 0.0);
+  tabControlPoint[5] = Point(1.0, -1.0, 0.0);
+
+  glColor3f(0, 0, 0);
+  drawCurve(tabControlPoint, nbControlPoint);
+
+  glColor3f(1, 1, 1);
+  bezierCurveByBernstein(tabControlPoint, nbControlPoint, nbU, tab);
+  drawCurve(tab, nbU);
 
  // création d'un polygone
 /*	glBegin(GL_POLYGON);
@@ -201,4 +259,82 @@ void drawVector(const Point& p, const Vector& v)
     glVertex3f(p.getX(), p.getY(), p.getZ());
     glVertex3f(p.getX()+v.getX(), p.getY()+v.getY(), p.getZ()+v.getZ());
   glEnd();
+}
+
+void drawSegment(const Point& p1, const Point& p2)
+{
+  glBegin(GL_LINES);
+    glVertex3f(p1.getX(), p1.getY(), p1.getZ());
+    glVertex3f(p2.getX(), p2.getY(), p2.getZ());
+  glEnd();
+}
+
+void drawCurve(const Point* tabPointsOfCurve, const long& nbPoints)
+{
+  glBegin(GL_LINE_STRIP);
+  for(int i = 0; i < nbPoints; i++)
+  {
+    glVertex3f(tabPointsOfCurve[i].getX(), tabPointsOfCurve[i].getY(), tabPointsOfCurve[i].getZ());
+  }
+  glEnd();
+  for(int i = 0; i < nbPoints; i++)
+    drawPoint(tabPointsOfCurve[i]);
+}
+
+void hermiteCubicCurve(Point p0, Point p1, Vector v0, Vector v1, long nbU, Point* tab)
+{
+  //calculer les coef
+  Point a, b, c, d;
+  d = Point(p0.getX(), p0.getY(), p0.getZ());
+  c = Point(v0.getX(), v0.getY(), v0.getZ());
+  b = Point(-3 * p0.getX() + 3 * p1.getX() - 2 * v0.getX() - v1.getX(),
+   -3 * p0.getY() + 3 * p1.getY() - 2 * v0.getY() - v1.getY(), 0);
+  a = Point(2 * p0.getX() - 2 * p1.getX() + v0.getX() + v1.getX(),
+   2 * p0.getY() - 2 * p1.getY() + v0.getY() + v1.getY(), 0);
+
+  for(int i = 0; i < nbU; i++)
+  {
+    double u = (double) i / (nbU - 1);
+    tab[i] = Point((a.getX() * pow(u, 3) + b.getX() * pow(u, 2) + c.getX() * u + d.getX()),
+      a.getY() * pow(u, 3) + b.getY() * pow(u, 2) + c.getY() * u + d.getY(), 0);
+    cout << tab[i].getX() << " " << tab[i].getY() << endl;
+  }
+}
+
+void bezierCurveByBernstein(Point* tabControlPoint, long nbControlPoint, long nbU, Point* tab)
+{
+  int n = nbControlPoint - 1;
+  Point b;
+  for(int i = 0; i < nbU; i++)
+  {
+    double u = (double) i / (nbU - 1);
+    b = Point(0.0, 0.0, 0.0);
+    Point p;
+    for(int j = 0; j <= n; j++)
+    {
+      b.setX(b.getX() + (((fact(n) / (fact(j) * fact(n - j))) * pow(u, j) * pow((1 - u), (n - j))) * 
+        tabControlPoint[j].getX()));
+
+      b.setY(b.getY() + (((fact(n) / (fact(j) * fact(n - j))) * pow(u, j) * pow((1 - u), (n - j))) * 
+        tabControlPoint[j].getY()));
+    }
+    tab[i] = Point(b.getX(), b.getY(), 0);
+    cout << "i = " << i << " xu = " << tab[i].getX() << "yu = " << tab[i].getY() << endl;
+  }
+}
+
+int fact(int n)
+{
+  if(n == 0 || n == 1)
+    return 1;
+  return n * fact(n-1);
+}
+
+void bezierCurveByCasteljau(Point* tabControlPoint, long nbControlPoint, long nbU, Point* tab)
+{
+}
+
+void casteljauRec(long n, Point* tabControlPoint, long nbControlPoint)
+{
+  
 }
