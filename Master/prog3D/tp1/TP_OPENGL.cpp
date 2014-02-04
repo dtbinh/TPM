@@ -246,7 +246,7 @@ void render_scene()
 
 void drawPoint(const Point& p)
 {
-  glPointSize(10);
+  glPointSize(5);
   glBegin(GL_POINTS);
     //glColor3f(0.0, 0.2, 0.5);
     glVertex3f(p.getX(), p.getY(), p.getZ());
@@ -297,7 +297,6 @@ void hermiteCubicCurve(Point p0, Point p1, Vector v0, Vector v1, long nbU, Point
     double u = (double) i / (nbU - 1);
     tab[i] = Point((a.getX() * pow(u, 3) + b.getX() * pow(u, 2) + c.getX() * u + d.getX()),
       a.getY() * pow(u, 3) + b.getY() * pow(u, 2) + c.getY() * u + d.getY(), 0);
-    cout << tab[i].getX() << " " << tab[i].getY() << endl;
   }
 }
 
@@ -319,7 +318,6 @@ void bezierCurveByBernstein(Point* tabControlPoint, long nbControlPoint, long nb
         tabControlPoint[j].getY()));
     }
     tab[i] = Point(b.getX(), b.getY(), 0);
-    cout << "i = " << i << " xu = " << tab[i].getX() << "yu = " << tab[i].getY() << endl;
   }
 }
 
@@ -332,9 +330,19 @@ int fact(int n)
 
 void bezierCurveByCasteljau(Point* tabControlPoint, long nbControlPoint, long nbU, Point* tab)
 {
+  int n = nbControlPoint - 1;
+  for(int i = 0; i < nbU; i++)
+  {
+    double u = (double) 1 / (nbU - 1);
+    //casteljauRec(n, tabControlPoint, nbControlPoint, tab[i]);
+  }
 }
 
-void casteljauRec(long n, Point* tabControlPoint, long nbControlPoint)
+Point casteljauRec(int k, int i, double u, Point* tabControlPoint)
 {
-  
+  if(k == 0)
+  {
+    return tabControlPoint[i];
+  }
+  return (1 - u) * casteljauRec(k - 1, i) + (u * casteljauRec(k - 1, i + 1));
 }
