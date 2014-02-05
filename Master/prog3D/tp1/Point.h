@@ -26,4 +26,7 @@ class Point
 		Point projectOnPlan(Point pointOnPlane, Vector normalOfPlane);
 };
 
+Point operator*(const double &a, const Point &p);
+Point operator+(const Point &p1, const Point &p2);
+
 #endif

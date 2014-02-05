@@ -76,3 +76,13 @@ Point Point::projectOnPlan(Point pointOnPlane, Vector normalOfPlane)
 
 	return point;
 }
+
+Point operator*(const double &a, const Point &p)
+{
+	return Point(p.getX() * a, p.getY() * a, p.getZ() * a);
+}
+
+Point operator+(const Point &p1, const Point &p2)
+{
+	return Point(p1.getX() + p2.getX(), p1.getY() + p2.getY(), p1.getZ() + p2.getZ());
+}

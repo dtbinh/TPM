@@ -58,6 +58,9 @@ void hermiteCubicCurve(Point p0, Point p1, Vector v0, Vector v1, long nbU, Point
 void bezierCurveByBernstein(Point* tabControlPoint, long nbControlPoint, long nbU, Point* tab);
 int fact(int n);
 
+void bezierCurveByCasteljau(Point* tabControlPoint, long nbControlPoint, long nbU, Point* tab);
+Point casteljauRec(int k, int i, double u, Point* tabControlPoint);
+
 
 
 int main(int argc, char **argv) 
@@ -200,7 +203,7 @@ void render_scene()
   Point p1 = Point(2.0, 0.0, 0.0);
   Vector v0 = Vector(1.0, 1.0, 0.0);
   Vector v1 = Vector(1.0, -1.0, 0.0);
-  long nbU = 50;
+  long nbU = 10;
   Point tab[nbU];
 
   //hermiteCubicCurve(p0, p1, v0, v1, nbU, tab);
@@ -222,6 +225,12 @@ void render_scene()
   glColor3f(1, 1, 1);
   bezierCurveByBernstein(tabControlPoint, nbControlPoint, nbU, tab);
   drawCurve(tab, nbU);
+
+  glColor3f(0, 1, 0);
+  bezierCurveByCasteljau(tabControlPoint, nbControlPoint, nbU, tab);
+  drawCurve(tab, nbU);
+
+
 
  // création d'un polygone
 /*	glBegin(GL_POLYGON);
@@ -333,8 +342,8 @@ void bezierCurveByCasteljau(Point* tabControlPoint, long nbControlPoint, long nb
   int n = nbControlPoint - 1;
   for(int i = 0; i < nbU; i++)
   {
-    double u = (double) 1 / (nbU - 1);
-    //casteljauRec(n, tabControlPoint, nbControlPoint, tab[i]);
+    double u = (double) i / (nbU -1);
+    tab[i] = casteljauRec(n, 0, u, tabControlPoint);
   }
 }
 
@@ -344,5 +353,6 @@ Point casteljauRec(int k, int i, double u, Point* tabControlPoint)
   {
     return tabControlPoint[i];
   }
-  return (1 - u) * casteljauRec(k - 1, i) + (u * casteljauRec(k - 1, i + 1));
+  return (((double)(1 - u) * casteljauRec(k - 1, i, u, tabControlPoint)) + 
+    (u * casteljauRec(k - 1, i + 1, u, tabControlPoint)));
 }
