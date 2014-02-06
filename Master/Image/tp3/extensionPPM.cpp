@@ -9,19 +9,19 @@ int main(int argc, char **argv)
 	int sMaxG, sMinG;
 	int sMaxB, sMinB;
   
-	if(argc != 9) 
+	if(argc != 3) 
 	{
 		printf("Usage: ImageIn.ppm Smin Smax\n"); 
 		return 1;
 	}
 	sscanf (argv[1],"%s",cNomImgLue);
-	sscanf (argv[2],"%d",&sMinR);
+	/*sscanf (argv[2],"%d",&sMinR);
 	sscanf (argv[3],"%d",&sMaxR);
 	sscanf (argv[4],"%d",&sMinG);
 	sscanf (argv[5],"%d",&sMaxG);
 	sscanf (argv[6],"%d",&sMinB);
-	sscanf (argv[7],"%d",&sMaxB);
-	sscanf (argv[8],"%s",cNomImgEcrite);
+	sscanf (argv[7],"%d",&sMaxB);*/
+	sscanf (argv[2],"%s",cNomImgEcrite);
 
 	
 	//ImageBase imIn, imOut;
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 			imOut[y*3][x*3+0] = imIn[y*3][x*3+0];
 			imOut[y*3][x*3+1] = imIn[y*3][x*3+1];
 			imOut[y*3][x*3+2] = imIn[y*3][x*3+2];
-
+/*
 			if(imIn[y*3][x*3+0] > sMaxR) // R
 				imOut[y*3][x*3+0] = sMaxR;
 			if(imIn[y*3][x*3+0] < sMinR) // R
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 			if(imIn[y*3][x*3+2] > sMaxB) // B
 				imOut[y*3][x*3+2] = sMaxB;
 			if(imIn[y*3][x*3+2] < sMinB) // B
-				imOut[y*3][x*3+2] = sMinB;
+				imOut[y*3][x*3+2] = sMinB;*/
 		}
 	}
 
@@ -175,23 +175,25 @@ int main(int argc, char **argv)
 	}
 	//printf("a0 = %d, a1 = %d\n", A0, A1);
 
-	int alfaR;
-	int betaR;
-	int alfaG;
-	int betaG;
-	int alfaB;
-	int betaB;
-	int Amin = 0;
-	int Amax = 255;
+	double alfaR;
+	double betaR;
+	double alfaG;
+	double betaG;
+	double alfaB;
+	double betaB;
+	double Amin = 0;
+	double Amax = 255;
 
-	alfaR = ((Amin * A1R) - (Amax * A0R)) / (A1R - A0R);
-	betaR = (Amax - Amin) / (A1R - A0R);
-	alfaG = ((Amin * A1G) - (Amax * A0G)) / (A1G - A0G);
-	betaG = (Amax - Amin) / (A1G - A0G);
-	alfaB = ((Amin * A1B) - (Amax * A0B)) / (A1B - A0B);
-	betaB = (Amax - Amin) / (A1B - A0B);
+	alfaR = (double) ((Amin * A1R) - (Amax * A0R)) / (double) (A1R - A0R);
+	betaR = (double) (Amax - Amin) / (A1R - A0R);
+	alfaG = (double) ((Amin * A1G) - (Amax * A0G)) / (double) (A1G - A0G);
+	betaG = (double) (Amax - Amin) / (A1G - A0G);
+	alfaB = (double) ((Amin * A1B) - (Amax * A0B)) / (double) (A1B - A0B);
+	betaB = (double) (Amax - Amin) / (A1B - A0B);
 
-	//printf("alfa = %d, beta = %d\n", alfa, beta);
+	printf("alfaR = %f, betaR = %f\n", alfaR, betaR);
+	printf("alfaG = %f, betaG = %f\n", alfaG, betaG);
+	printf("alfaB = %f, betaB = %f\n", alfaB, betaB);
 
 	for(int x = 0; x < imIn.getHeight(); ++x)
 		for(int y = 0; y < imIn.getWidth(); ++y)
