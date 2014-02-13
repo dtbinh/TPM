@@ -13,6 +13,7 @@
 #include <stdlib.h>     
 #include <math.h>
 #include <iostream>
+#include <vector>
 
 
 /* Dans les salles de TP, vous avez généralement accès aux glut dans C:\Dev. Si ce n'est pas le cas, téléchargez les .h .lib ...
@@ -40,6 +41,15 @@ using namespace std;
 // Touche echap (Esc) permet de sortir du programme
 #define KEY_ESC 27
 
+//touche pour augmenter ou diminuer le nombre de point de U
+#define KEY_D 100
+#define KEY_Q 113
+long nbU = 3;
+
+
+long nbControlPoint = 4;
+vector<Point> tabControlPoint;
+
 
 // Entêtes de fonctions
 void init_scene();
@@ -52,14 +62,19 @@ GLvoid window_key(unsigned char key, int x, int y);
 void drawPoint(const Point& p);
 void drawVector(const Point& p, const Vector& v);
 void drawSegment(const Point& p1, const Point& p2);
-void drawCurve(const Point* tabPointsOfCurve, const long& nbPoints);
+void drawCurve(const vector<Point> tabPointsOfCurve);
+void drawCurve(const Point* tabPointsOfCurve, const long nbPoints);
+void movePoint(int x, int y);
+double pixelToOrthoX(int x);
+double pixelToOrthoY(int y);
+
 void hermiteCubicCurve(Point p0, Point p1, Vector v0, Vector v1, long nbU, Point* tab);
 
 void bezierCurveByBernstein(Point* tabControlPoint, long nbControlPoint, long nbU, Point* tab);
 int fact(int n);
 
-void bezierCurveByCasteljau(Point* tabControlPoint, long nbControlPoint, long nbU, Point* tab);
-Point casteljauRec(int k, int i, double u, Point* tabControlPoint);
+void bezierCurveByCasteljau(vector<Point> tabControlPoint, long nbControlPoint, long nbU, Point* tab);
+Point casteljauRec(int k, int i, double u, vector<Point> tabControlPoint);
 
 
 
@@ -86,6 +101,7 @@ int main(int argc, char **argv)
   glutReshapeFunc(&window_reshape);
   // la gestion des événements clavier
   glutKeyboardFunc(&window_key);
+  glutMotionFunc(movePoint);
 
   // la boucle prinicipale de gestion des événements utilisateur
   glutMainLoop();  
@@ -146,6 +162,15 @@ GLvoid window_key(unsigned char key, int x, int y)
   case KEY_ESC:  
     exit(1);                    
     break; 
+  case KEY_D:
+    nbU++;
+    window_display();
+    break;
+  case KEY_Q:
+    if(nbU > 3)
+      nbU--;
+    window_display();
+    break;
     
   default:
     printf ("La touche %d n´est pas active.\n", key);
@@ -165,7 +190,13 @@ void render_scene()
 
   //  Nous créons ici un polygone. Nous pourrions aussi créer un triangle ou des lignes. Voir ci-dessous les parties 
   // en commentaires (il faut commenter le bloc qui ne vous intéresse pas et décommenter celui que vous voulez tester.
-
+  tabControlPoint.clear();
+  tabControlPoint.push_back(Point(-1.0, 0.0, 0.0));
+  tabControlPoint.push_back(Point(-0.5, 0.7, 0.0));
+  tabControlPoint.push_back(Point(1.0, 1.0, 0.0));
+  tabControlPoint.push_back(Point(1.5, 0.5, 0.0));
+  // tabControlPoint[4] = Point(0.5, -0.7, 0.0);
+  // tabControlPoint[5] = Point(1.0, -1.0, 0.0);
 
   //dessin d'un repere
   drawPoint(Point(0, 0, 0));
@@ -203,28 +234,18 @@ void render_scene()
   Point p1 = Point(2.0, 0.0, 0.0);
   Vector v0 = Vector(1.0, 1.0, 0.0);
   Vector v1 = Vector(1.0, -1.0, 0.0);
-  long nbU = 10;
   Point tab[nbU];
 
   //hermiteCubicCurve(p0, p1, v0, v1, nbU, tab);
   //drawCurve(tab, nbU);
 
   //tp2 exercice2
-  long nbControlPoint = 6;
-  Point tabControlPoint[nbControlPoint];
-  tabControlPoint[0] = Point(-1.0, 0.0, 0.0);
-  tabControlPoint[1] = Point(-0.5, 0.7, 0.0);
-  tabControlPoint[2] = Point(0.0, 1.0, 0.0);
-  tabControlPoint[3] = Point(0.0, 0.0, 0.0);
-  tabControlPoint[4] = Point(0.5, -0.7, 0.0);
-  tabControlPoint[5] = Point(1.0, -1.0, 0.0);
-
   glColor3f(0, 0, 0);
-  drawCurve(tabControlPoint, nbControlPoint);
+  drawCurve(tabControlPoint);
 
-  glColor3f(1, 1, 1);
-  bezierCurveByBernstein(tabControlPoint, nbControlPoint, nbU, tab);
-  drawCurve(tab, nbU);
+  // glColor3f(1, 1, 1);
+  // bezierCurveByBernstein(tabControlPoint, nbControlPoint, nbU, tab);
+  // drawCurve(tab, nbU);
 
   glColor3f(0, 1, 0);
   bezierCurveByCasteljau(tabControlPoint, nbControlPoint, nbU, tab);
@@ -253,6 +274,19 @@ void render_scene()
 
 }
 
+
+
+// ========================================================================================================= //
+// ========================================================================================================= //
+// ========================================================================================================= //
+// =================================================== FUNCTION ============================================ //
+// ========================================================================================================= //
+// ========================================================================================================= //
+// ========================================================================================================= //
+
+
+
+
 void drawPoint(const Point& p)
 {
   glPointSize(5);
@@ -278,7 +312,19 @@ void drawSegment(const Point& p1, const Point& p2)
   glEnd();
 }
 
-void drawCurve(const Point* tabPointsOfCurve, const long& nbPoints)
+void drawCurve(const vector<Point> tabPointsOfCurve)
+{
+  glBegin(GL_LINE_STRIP);
+  for(int i = 0; i < tabPointsOfCurve.size(); i++)
+  {
+    glVertex3f(tabPointsOfCurve[i].getX(), tabPointsOfCurve[i].getY(), tabPointsOfCurve[i].getZ());
+  }
+  glEnd();
+  for(int i = 0; i < tabPointsOfCurve.size(); i++)
+    drawPoint(tabPointsOfCurve[i]);
+}
+
+void drawCurve(const Point* tabPointsOfCurve, const long nbPoints)
 {
   glBegin(GL_LINE_STRIP);
   for(int i = 0; i < nbPoints; i++)
@@ -288,6 +334,23 @@ void drawCurve(const Point* tabPointsOfCurve, const long& nbPoints)
   glEnd();
   for(int i = 0; i < nbPoints; i++)
     drawPoint(tabPointsOfCurve[i]);
+}
+
+void movePoint(int x, int y)
+{
+  tabControlPoint[0].setX(pixelToOrthoX(x));
+  tabControlPoint[0].setY(pixelToOrthoY(y));
+  window_display();
+}
+
+double pixelToOrthoX(int x)
+{
+  return -2.0 + (double) x / (double) WIDTH * 4.0;
+}
+
+double pixelToOrthoY(int y)
+{
+  return 2 - (double) y / (double) HEIGHT * 4.0;
 }
 
 void hermiteCubicCurve(Point p0, Point p1, Vector v0, Vector v1, long nbU, Point* tab)
@@ -337,7 +400,7 @@ int fact(int n)
   return n * fact(n-1);
 }
 
-void bezierCurveByCasteljau(Point* tabControlPoint, long nbControlPoint, long nbU, Point* tab)
+void bezierCurveByCasteljau(vector<Point> tabControlPoint, long nbControlPoint, long nbU, Point* tab)
 {
   int n = nbControlPoint - 1;
   for(int i = 0; i < nbU; i++)
@@ -347,12 +410,14 @@ void bezierCurveByCasteljau(Point* tabControlPoint, long nbControlPoint, long nb
   }
 }
 
-Point casteljauRec(int k, int i, double u, Point* tabControlPoint)
+Point casteljauRec(int k, int i, double u, vector<Point> tabControlPoint)
 {
   if(k == 0)
   {
     return tabControlPoint[i];
   }
-  return (((double)(1 - u) * casteljauRec(k - 1, i, u, tabControlPoint)) + 
-    (u * casteljauRec(k - 1, i + 1, u, tabControlPoint)));
+  Point p1 = casteljauRec(k - 1, i, u, tabControlPoint);
+  Point p2 = casteljauRec(k - 1, i + 1, u, tabControlPoint);
+  drawSegment(p1, p2);
+  return (((double)(1 - u) * p1) + (u * p2));
 }

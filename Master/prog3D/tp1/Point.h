@@ -28,5 +28,6 @@ class Point
 
 Point operator*(const double &a, const Point &p);
 Point operator+(const Point &p1, const Point &p2);
+// void operator=(Point &p1, const Point &p2);
 
 #endif
