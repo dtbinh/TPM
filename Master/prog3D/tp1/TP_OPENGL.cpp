@@ -49,6 +49,7 @@ long nbU = 3;
 
 long nbControlPoint = 4;
 vector<Point> tabControlPoint;
+vector<Point> tabControlPoint2;
 
 
 // Entêtes de fonctions
@@ -75,7 +76,8 @@ int fact(int n);
 
 void bezierCurveByCasteljau(vector<Point> tabControlPoint, long nbControlPoint, long nbU, Point* tab);
 Point casteljauRec(int k, int i, double u, vector<Point> tabControlPoint);
-
+void surfaceReglee(Point* tab, Point* tab2, long nbU);
+Point segmentPoint(Point p1, Point p2, int i, int nbU);
 
 
 int main(int argc, char **argv) 
@@ -104,7 +106,7 @@ int main(int argc, char **argv)
   glutMotionFunc(movePoint);
 
   // la boucle prinicipale de gestion des événements utilisateur
-  glutMainLoop();  
+  glutMainLoop();
 
   return 1;
 }
@@ -185,8 +187,10 @@ GLvoid window_key(unsigned char key, int x, int y)
 /////////////////////////////////////////////////////////////////////////////////////////
 void render_scene()
 {
-//Définition de la couleur
- glColor3f(1.0, 1.0, 1.0);
+  //permet de dessiner des polygone vide
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  //Définition de la couleur
+  glColor3f(1.0, 1.0, 1.0);
 
   //  Nous créons ici un polygone. Nous pourrions aussi créer un triangle ou des lignes. Voir ci-dessous les parties 
   // en commentaires (il faut commenter le bloc qui ne vous intéresse pas et décommenter celui que vous voulez tester.
@@ -195,8 +199,12 @@ void render_scene()
   tabControlPoint.push_back(Point(-0.5, 0.7, 0.0));
   tabControlPoint.push_back(Point(1.0, 1.0, 0.0));
   tabControlPoint.push_back(Point(1.5, 0.5, 0.0));
-  // tabControlPoint[4] = Point(0.5, -0.7, 0.0);
-  // tabControlPoint[5] = Point(1.0, -1.0, 0.0);
+
+  tabControlPoint2.clear();
+  tabControlPoint2.push_back(Point(-1.0, 1.0, 0.0));
+  tabControlPoint2.push_back(Point(-0.5, 1.7, 0.0));
+  tabControlPoint2.push_back(Point(1.0, 2.0, 0.0));
+  tabControlPoint2.push_back(Point(1.5, 1.5, 0.0));
 
   //dessin d'un repere
   drawPoint(Point(0, 0, 0));
@@ -235,6 +243,7 @@ void render_scene()
   Vector v0 = Vector(1.0, 1.0, 0.0);
   Vector v1 = Vector(1.0, -1.0, 0.0);
   Point tab[nbU];
+  Point tab2[nbU];
 
   //hermiteCubicCurve(p0, p1, v0, v1, nbU, tab);
   //drawCurve(tab, nbU);
@@ -247,9 +256,20 @@ void render_scene()
   // bezierCurveByBernstein(tabControlPoint, nbControlPoint, nbU, tab);
   // drawCurve(tab, nbU);
 
+  /*// TP2 exercice3
   glColor3f(0, 1, 0);
   bezierCurveByCasteljau(tabControlPoint, nbControlPoint, nbU, tab);
   drawCurve(tab, nbU);
+  */
+
+  //TP surface parametrique
+  glColor3f(0, 1, 0);
+  bezierCurveByCasteljau(tabControlPoint, nbControlPoint, nbU, tab);
+  bezierCurveByCasteljau(tabControlPoint2, nbControlPoint, nbU, tab2);
+  drawCurve(tab, nbU);
+  drawCurve(tab2, nbU);
+  surfaceReglee(tab, tab2, nbU);
+
 
 
 
@@ -338,8 +358,9 @@ void drawCurve(const Point* tabPointsOfCurve, const long nbPoints)
 
 void movePoint(int x, int y)
 {
-  tabControlPoint[0].setX(pixelToOrthoX(x));
-  tabControlPoint[0].setY(pixelToOrthoY(y));
+  tabControlPoint[1].setX(pixelToOrthoX(x));
+  tabControlPoint[1].setY(pixelToOrthoY(y));
+  cout << " x = " << tabControlPoint[1].getX() << " y = " << tabControlPoint[1].getY() << endl;
   window_display();
 }
 
@@ -418,6 +439,45 @@ Point casteljauRec(int k, int i, double u, vector<Point> tabControlPoint)
   }
   Point p1 = casteljauRec(k - 1, i, u, tabControlPoint);
   Point p2 = casteljauRec(k - 1, i + 1, u, tabControlPoint);
-  drawSegment(p1, p2);
+  //drawSegment(p1, p2);
   return (((double)(1 - u) * p1) + (u * p2));
+}
+
+void surfaceReglee(Point* tab, Point* tab2, long nbU)
+{
+  for(int i = 0; i < nbU; i++)
+  {
+    drawSegment(tab[i], tab2[i]);
+    for(int j = 0; j < nbU + 1; j++)
+    {
+      Point p = segmentPoint(tab[i], tab2[i], j, nbU);
+      //drawPoint(p);
+      if(i < nbU - 1 && j > 0)
+      {
+        Point p0 = segmentPoint(tab[i], tab2[i], j - 1, nbU);
+        Point p1 = segmentPoint(tab[i + 1], tab2[i + 1], j - 1, nbU);
+        glBegin(GL_TRIANGLES);
+          glVertex3f(p0.getX(), p0.getY(), p0.getZ());
+          glVertex3f(p1.getX(), p1.getY(), p1.getZ());
+          glVertex3f(p.getX(), p.getY(), p.getZ());
+        glEnd();
+      }
+      if(i > 0 && j < nbU)
+      {
+        Point p0 = segmentPoint(tab[i - 1], tab2[i - 1], j + 1, nbU);
+        Point p1 = segmentPoint(tab[i], tab2[i], j + 1, nbU);
+        glBegin(GL_TRIANGLES);
+          glVertex3f(p0.getX(), p0.getY(), p0.getZ());
+          glVertex3f(p1.getX(), p1.getY(), p1.getZ());
+          glVertex3f(p.getX(), p.getY(), p.getZ());
+        glEnd();
+      }
+    }
+  }
+}
+
+Point segmentPoint(Point p1, Point p2, int i, int nbU)
+{
+  Vector v1 = Vector(i*(p2.getX() - p1.getX())/nbU, i*(p2.getY() - p1.getY())/nbU, i*(p2.getZ() - p1.getZ())/nbU);
+  return Point(p1.getX()+v1.getX(), p1.getY()+v1.getY(), p1.getZ()+v1.getZ());
 }
