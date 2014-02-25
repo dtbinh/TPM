@@ -45,7 +45,7 @@ using namespace std;
 #define KEY_D 100
 #define KEY_Q 113
 long nbU = 3;
-
+const double PI  =3.141592653589793238463;
 
 long nbControlPoint = 4;
 vector<Point> tabControlPoint;
@@ -78,6 +78,8 @@ void bezierCurveByCasteljau(vector<Point> tabControlPoint, long nbControlPoint, 
 Point casteljauRec(int k, int i, double u, vector<Point> tabControlPoint);
 void surfaceReglee(Point* tab, Point* tab2, long nbU);
 Point segmentPoint(Point p1, Point p2, int i, int nbU);
+
+void facettisationCylindre(int rayon, int hauteur, int nbMeridien);
 
 
 int main(int argc, char **argv) 
@@ -182,9 +184,9 @@ GLvoid window_key(unsigned char key, int x, int y)
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////>>>>>>>>>>>>>>>
 // Fonction que vous allez modifier afin de dessiner
-/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////>>>>>>>>>>>>>>>>
 void render_scene()
 {
   //permet de dessiner des polygone vide
@@ -256,22 +258,23 @@ void render_scene()
   // bezierCurveByBernstein(tabControlPoint, nbControlPoint, nbU, tab);
   // drawCurve(tab, nbU);
 
-  /*// TP2 exercice3
+  // TP2 exercice3
   glColor3f(0, 1, 0);
   bezierCurveByCasteljau(tabControlPoint, nbControlPoint, nbU, tab);
   drawCurve(tab, nbU);
-  */
+  
 
   //TP surface parametrique
-  glColor3f(0, 1, 0);
-  bezierCurveByCasteljau(tabControlPoint, nbControlPoint, nbU, tab);
-  bezierCurveByCasteljau(tabControlPoint2, nbControlPoint, nbU, tab2);
-  drawCurve(tab, nbU);
-  drawCurve(tab2, nbU);
-  surfaceReglee(tab, tab2, nbU);
+  // glColor3f(0, 1, 0);
+  // bezierCurveByCasteljau(tabControlPoint, nbControlPoint, nbU, tab);
+  // bezierCurveByCasteljau(tabControlPoint2, nbControlPoint, nbU, tab2);
+  // drawCurve(tab, nbU);
+  // drawCurve(tab2, nbU);
+  // surfaceReglee(tab, tab2, nbU);
 
-
-
+  //TP representation surfacique
+  // glColor3f(0, 1, 0);
+  // facettisationCylindre(10, 20, 10);
 
  // création d'un polygone
 /*	glBegin(GL_POLYGON);
@@ -439,7 +442,7 @@ Point casteljauRec(int k, int i, double u, vector<Point> tabControlPoint)
   }
   Point p1 = casteljauRec(k - 1, i, u, tabControlPoint);
   Point p2 = casteljauRec(k - 1, i + 1, u, tabControlPoint);
-  //drawSegment(p1, p2);
+  drawSegment(p1, p2);
   return (((double)(1 - u) * p1) + (u * p2));
 }
 
@@ -480,4 +483,14 @@ Point segmentPoint(Point p1, Point p2, int i, int nbU)
 {
   Vector v1 = Vector(i*(p2.getX() - p1.getX())/nbU, i*(p2.getY() - p1.getY())/nbU, i*(p2.getZ() - p1.getZ())/nbU);
   return Point(p1.getX()+v1.getX(), p1.getY()+v1.getY(), p1.getZ()+v1.getZ());
+}
+
+void facettisationCylindre(int rayon, int hauteur, int nbMeridien)
+{
+  for (int i = 0; i < nbMeridien; i++)
+  {
+    double tetha = 2 * PI * i / nbMeridien;
+    Point p1 = Point(rayon * acos(tetha), rayon * asin(tetha), -hauteur/2);
+    Point p2 = Point(rayon * acos(tetha), rayon * asin(tetha), hauteur/2);
+  }
 }
