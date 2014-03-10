@@ -31,8 +31,11 @@ using namespace std;
 #define WIDTH  480
 #define HEIGHT 480
 
+#define MINORTHO -50.0
+#define MAXORTHO 50.0
+
 // Définition de la couleur de la fenêtre
-#define RED   1
+#define RED   0
 #define GREEN 0
 #define BLUE  0
 #define ALPHA 1
@@ -44,12 +47,23 @@ using namespace std;
 //touche pour augmenter ou diminuer le nombre de point de U
 #define KEY_D 100
 #define KEY_Q 113
+#define KEY_L 108
+#define KEY_K 107
+#define KEY_PLUS 61
+#define KEY_MOINS 45
 long nbU = 3;
-const double PI  =3.141592653589793238463;
+const double PI = 3.141592653589793238463;
 
 long nbControlPoint = 4;
 vector<Point> tabControlPoint;
 vector<Point> tabControlPoint2;
+
+vector<Point> northPoints;
+vector<Point> southPoints;
+float angleCam = 0;
+
+int nbParallele = 8;
+int nbMeridien = 8;
 
 
 // Entêtes de fonctions
@@ -60,6 +74,8 @@ GLvoid window_display();
 GLvoid window_reshape(GLsizei width, GLsizei height); 
 GLvoid window_key(unsigned char key, int x, int y);
 
+
+void drawAxes();
 void drawPoint(const Point& p);
 void drawVector(const Point& p, const Vector& v);
 void drawSegment(const Point& p1, const Point& p2);
@@ -79,8 +95,13 @@ Point casteljauRec(int k, int i, double u, vector<Point> tabControlPoint);
 void surfaceReglee(Point* tab, Point* tab2, long nbU);
 Point segmentPoint(Point p1, Point p2, int i, int nbU);
 
-void facettisationCylindre(int rayon, int hauteur, int nbMeridien);
+void facettisationCylindre(double rayon, double hauteur, int nbMeridien);
+void drawCylinder(vector<Point> northPoints, vector<Point> southPoints);
 
+void facettisationCone(float rayon, float hauteur, Point sommet, int nbMeridien);
+void drawCone(Point sommet, vector<Point> basePoints);
+
+void facettisationSphere(float rayon, int nbMeridien, int nbParallele);
 
 int main(int argc, char **argv) 
 {
@@ -152,7 +173,8 @@ GLvoid window_reshape(GLsizei width, GLsizei height)
   // ici, vous verrez pendant le cours sur les projections qu'en modifiant les valeurs, il est
   // possible de changer la taille de l'objet dans la fenêtre. Augmentez ces valeurs si l'objet est 
   // de trop grosse taille par rapport à la fenêtre.
-  glOrtho(-2.0, 2.0, -2.0, 2.0, -2.0, 2.0);
+  //glOrtho(-2.0, 2.0, -2.0, 2.0, -2.0, 2.0);
+  glOrtho(MINORTHO, MAXORTHO, MINORTHO, MAXORTHO, MINORTHO, MAXORTHO);
 
   // toutes les transformations suivantes s´appliquent au modèle de vue 
   glMatrixMode(GL_MODELVIEW);
@@ -175,7 +197,29 @@ GLvoid window_key(unsigned char key, int x, int y)
       nbU--;
     window_display();
     break;
-    
+  case KEY_L:
+    if(angleCam < 360)
+      angleCam++;
+    window_display();
+    break;
+  case KEY_K:
+    if(angleCam > 0)
+      angleCam--;
+    window_display();
+    break;
+  case KEY_PLUS:
+    nbParallele++;
+    nbMeridien++;
+    window_display();
+    break;
+  case KEY_MOINS:
+    if(nbParallele > 4)
+    {
+      nbParallele--;
+      nbMeridien--;
+    }
+    window_display();
+    break;
   default:
     printf ("La touche %d n´est pas active.\n", key);
     break;
@@ -189,6 +233,7 @@ GLvoid window_key(unsigned char key, int x, int y)
 /////////////////////////////////////////////////////////////////////////////////////////>>>>>>>>>>>>>>>>
 void render_scene()
 {
+  glRotated(angleCam, 0, 1, 0);
   //permet de dessiner des polygone vide
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   //Définition de la couleur
@@ -209,15 +254,16 @@ void render_scene()
   tabControlPoint2.push_back(Point(1.5, 1.5, 0.0));
 
   //dessin d'un repere
-  drawPoint(Point(0, 0, 0));
-  glColor3f(0, 1.0, 0);
-  drawVector(Point(0, 0, 0), Vector(0, 0.5, 0));
-  glColor3f(0, 1.0, 0);
-  drawVector(Point(0, 0, 0), Vector(0.5, 0, 0));
+  // drawPoint(Point(0, 0, 0));
+  // glColor3f(0, 1.0, 0);
+  // drawVector(Point(0, 0, 0), Vector(0, 0.5, 0));
+  // glColor3f(0, 1.0, 0);
+  // drawVector(Point(0, 0, 0), Vector(0.5, 0, 0));
+  drawAxes();
   //fin du repere
 
 
-  //tp1
+  //========================================tp1
   /*
   glColor3f(1.0, 1.0, 1.0);
 
@@ -235,7 +281,7 @@ void render_scene()
   */
 
 
-  //tp2
+  //========================================tp2
   // Point tabPointsOfCurve[4] = {Point(-.5, -1, 0), Point(-1, 1, 0), Point(1, 1, 0), Point(1, -1, 0)};
   // drawCurve(tabPointsOfCurve, 4);
 
@@ -250,21 +296,21 @@ void render_scene()
   //hermiteCubicCurve(p0, p1, v0, v1, nbU, tab);
   //drawCurve(tab, nbU);
 
-  //tp2 exercice2
-  glColor3f(0, 0, 0);
-  drawCurve(tabControlPoint);
+  //========================================TP2 exercice2
+  // glColor3f(0, 1, 0);
+  // drawCurve(tabControlPoint);
 
   // glColor3f(1, 1, 1);
   // bezierCurveByBernstein(tabControlPoint, nbControlPoint, nbU, tab);
   // drawCurve(tab, nbU);
 
-  // TP2 exercice3
-  glColor3f(0, 1, 0);
-  bezierCurveByCasteljau(tabControlPoint, nbControlPoint, nbU, tab);
-  drawCurve(tab, nbU);
+  //========================================TP2 exercice3
+  // glColor3f(0, 0, 1);
+  // bezierCurveByCasteljau(tabControlPoint, nbControlPoint, nbU, tab);
+  // drawCurve(tab, nbU);
   
 
-  //TP surface parametrique
+  //========================================TP surface parametrique
   // glColor3f(0, 1, 0);
   // bezierCurveByCasteljau(tabControlPoint, nbControlPoint, nbU, tab);
   // bezierCurveByCasteljau(tabControlPoint2, nbControlPoint, nbU, tab2);
@@ -272,29 +318,22 @@ void render_scene()
   // drawCurve(tab2, nbU);
   // surfaceReglee(tab, tab2, nbU);
 
-  //TP representation surfacique
+  //========================================TP representation surfacique
+  //Exercice 1: facettisation d'un cylindre
   // glColor3f(0, 1, 0);
   // facettisationCylindre(10, 20, 10);
-
- // création d'un polygone
-/*	glBegin(GL_POLYGON);
-		glVertex3f(-1, -1, 0);
-		glVertex3f(1, -1, 0);
-		glVertex3f(1, 1, 0);
-		glVertex3f(-1, 1, 0);
-	glEnd();
-*/
+  // drawCylinder(northPoints, southPoints);
 
 
-/*
-// création d'un triangle
-	glBegin(GL_TRIANGLES);
-		glVertex3f(-1, -1, 0);
-		glVertex3f(1, -1, 0);
-		glVertex3f(1, 1, 0);
-	glEnd();
-*/
+  //Exercice 2: facettisation d'un cone
+  // glColor3f(0, 1, 0);
+  // Point sommet = Point(0, 0, 20);
+  // facettisationCone(15, 20, sommet, 10);
+  // drawCone(sommet, southPoints);
 
+  //Exercice 3: facettisation d'une sphere
+  glColor3f(0, 1, 0);
+  facettisationSphere(20, nbMeridien, nbParallele);
 }
 
 
@@ -307,12 +346,24 @@ void render_scene()
 // ========================================================================================================= //
 // ========================================================================================================= //
 
-
-
+void drawAxes()
+{
+  /* Length of axes */
+  double len = 10.0;
+  glColor3f(1.0,1.0,1.0);
+  glBegin(GL_LINES);
+  glVertex3d(0,0,0);
+  glVertex3d(len,0,0);
+  glVertex3d(0,0,0);
+  glVertex3d(0,len,0);
+  glVertex3d(0,0,0);
+  glVertex3d(0,0,len);
+  glEnd();
+}
 
 void drawPoint(const Point& p)
 {
-  glPointSize(5);
+  glPointSize(1);
   glBegin(GL_POINTS);
     //glColor3f(0.0, 0.2, 0.5);
     glVertex3f(p.getX(), p.getY(), p.getZ());
@@ -369,12 +420,12 @@ void movePoint(int x, int y)
 
 double pixelToOrthoX(int x)
 {
-  return -2.0 + (double) x / (double) WIDTH * 4.0;
+  return MINORTHO + (double) x / (double) WIDTH * MAXORTHO * 2;
 }
 
 double pixelToOrthoY(int y)
 {
-  return 2 - (double) y / (double) HEIGHT * 4.0;
+  return MAXORTHO - (double) y / (double) HEIGHT * MAXORTHO * 2;
 }
 
 void hermiteCubicCurve(Point p0, Point p1, Vector v0, Vector v1, long nbU, Point* tab)
@@ -442,7 +493,7 @@ Point casteljauRec(int k, int i, double u, vector<Point> tabControlPoint)
   }
   Point p1 = casteljauRec(k - 1, i, u, tabControlPoint);
   Point p2 = casteljauRec(k - 1, i + 1, u, tabControlPoint);
-  drawSegment(p1, p2);
+  //drawSegment(p1, p2);
   return (((double)(1 - u) * p1) + (u * p2));
 }
 
@@ -485,12 +536,88 @@ Point segmentPoint(Point p1, Point p2, int i, int nbU)
   return Point(p1.getX()+v1.getX(), p1.getY()+v1.getY(), p1.getZ()+v1.getZ());
 }
 
-void facettisationCylindre(int rayon, int hauteur, int nbMeridien)
+void facettisationCylindre(double rayon, double hauteur, int nbMeridien)
 {
   for (int i = 0; i < nbMeridien; i++)
   {
-    double tetha = 2 * PI * i / nbMeridien;
-    Point p1 = Point(rayon * acos(tetha), rayon * asin(tetha), -hauteur/2);
-    Point p2 = Point(rayon * acos(tetha), rayon * asin(tetha), hauteur/2);
+    double tetha = 2 * PI * ((double) i / nbMeridien);
+    northPoints.push_back(Point(rayon * cos(tetha), rayon * sin(tetha), -hauteur/2));
+    southPoints.push_back(Point(rayon * cos(tetha), rayon * sin(tetha), hauteur/2));
+  }
+}
+
+void drawCylinder(vector<Point> northPoints, vector<Point> southPoints)
+{
+  glBegin(GL_POLYGON);
+  glColor3f(0, 1, 0);
+  for(int i = 0; i < northPoints.size(); i++)
+  {
+    glVertex3f(northPoints[i].getX(), northPoints[i].getY(), northPoints[i].getZ());
+  }
+  glEnd();
+  
+  glBegin(GL_POLYGON);
+  glColor3f(0, 0, 1);
+  for(int i = 0; i < southPoints.size(); i++)
+  {
+    glVertex3f(southPoints[i].getX(), southPoints[i].getY(), southPoints[i].getZ());
+  }
+  glEnd();
+
+  for(int i = 0; i < northPoints.size(); i++)
+  {
+    glColor3f(1, 0, 0);
+    drawSegment(northPoints[i], southPoints[i]);
+  }
+}
+
+void facettisationCone(float rayon, float hauteur, Point sommet, int nbMeridien)
+{
+  for (int i = 0; i < nbMeridien; i++)
+  {
+    double tetha = 2 * PI * ((double) i / nbMeridien);
+    northPoints.push_back(Point(rayon * cos(tetha), rayon * sin(tetha), -hauteur/2));
+    southPoints.push_back(Point(rayon * cos(tetha), rayon * sin(tetha), hauteur/2));
+  }
+}
+
+void drawCone(Point sommet, vector<Point> basePoints)
+{
+  glBegin(GL_TRIANGLE_FAN);
+    glVertex3f(sommet.getX(), sommet.getY(), sommet.getZ());
+    for(int i = 0; i < basePoints.size(); i++)
+    {
+      glVertex3f(basePoints[i].getX(), basePoints[i].getY(), basePoints[i].getZ());
+    }
+    glVertex3f(basePoints[0].getX(), basePoints[0].getY(), basePoints[0].getZ());
+  glEnd();
+}
+
+void facettisationSphere(float rayon, int nbMeridien, int nbParallele)
+{
+  for(int i = 0; i < nbMeridien; i++)
+  {
+    double tetha = 2 * PI * ((double) i / nbMeridien);
+    glBegin(GL_LINE_STRIP);
+    for(int j = 0; j <= nbParallele; j++)
+    {
+      double phy = PI * ((double) j / nbParallele);
+      Point tmp = Point(rayon * sin(phy) * cos(tetha), rayon * sin(phy) * sin(tetha), rayon * cos(phy));
+      glVertex3f(tmp.getX(), tmp.getY(), tmp.getZ());
+    }
+    glEnd();
+  }
+
+  for(int i = 0; i <= nbParallele; i++)
+  {
+    double phy = PI * ((double) i / nbParallele);
+    glBegin(GL_LINE_STRIP);
+    for(int j = 0; j <= nbMeridien; j++)
+    {
+      double tetha = 2 * PI * ((double) j / nbMeridien);
+      Point tmp = Point(rayon * sin(phy) * cos(tetha), rayon * sin(phy) * sin(tetha), rayon * cos(phy));
+      glVertex3f(tmp.getX(), tmp.getY(), tmp.getZ());
+    }
+    glEnd();
   }
 }
