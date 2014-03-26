@@ -24,6 +24,7 @@ Si vous mettez glut dans le répertoire courant, on aura alors #include "glut.h"
 #include <GL/glut.h> 
 #include "Vector.h"
 #include "Point.h"
+#include "Cube.h"
 
 using namespace std;
 
@@ -102,6 +103,10 @@ void facettisationCone(float rayon, float hauteur, Point sommet, int nbMeridien)
 void drawCone(Point sommet, vector<Point> basePoints);
 
 void facettisationSphere(float rayon, int nbMeridien, int nbParallele);
+
+void drawCube(Point center, float size);
+void drawCube(Point* v, float size, int len);
+
 
 int main(int argc, char **argv) 
 {
@@ -332,8 +337,25 @@ void render_scene()
   // drawCone(sommet, southPoints);
 
   //Exercice 3: facettisation d'une sphere
+  // glColor3f(0, 1, 0);
+  // facettisationSphere(20, nbMeridien, nbParallele);
+
+  //========================================TP Modele Volumique
+  //Exercice 1
   glColor3f(0, 1, 0);
-  facettisationSphere(20, nbMeridien, nbParallele);
+  Point center = Point(0, 0, 0);
+  //drawCube(center, 8.0);
+  Cube cube = Cube(center, 8);
+  cout << "avant sub" << endl;
+  Point v[(int)pow(4, 3)];
+  cube.subdiviseCube(4, v);
+  for(int i; i < (int)pow(4, 3); i++)
+  {
+    cout << v[i] << endl;
+  }
+  cout << "apres sub" << endl;
+  drawCube(v, 8, (int)pow(4, 3));
+  cout << "apres draw" << endl;
 }
 
 
@@ -619,5 +641,65 @@ void facettisationSphere(float rayon, int nbMeridien, int nbParallele)
       glVertex3f(tmp.getX(), tmp.getY(), tmp.getZ());
     }
     glEnd();
+  }
+}
+
+void drawCube(Point center, float size)
+{
+  Cube cube(center, size);
+
+  glBegin(GL_POLYGON);
+    glVertex3f(cube.p1.getX(), cube.p1.getY(), cube.p1.getZ());
+    glVertex3f(cube.p2.getX(), cube.p2.getY(), cube.p2.getZ());
+    glVertex3f(cube.p3.getX(), cube.p3.getY(), cube.p3.getZ());
+    glVertex3f(cube.p4.getX(), cube.p4.getY(), cube.p4.getZ());
+  glEnd();
+
+  glBegin(GL_POLYGON);
+    glVertex3f(cube.p5.getX(), cube.p5.getY(), cube.p5.getZ());
+    glVertex3f(cube.p6.getX(), cube.p6.getY(), cube.p6.getZ());
+    glVertex3f(cube.p7.getX(), cube.p7.getY(), cube.p7.getZ());
+    glVertex3f(cube.p8.getX(), cube.p8.getY(), cube.p8.getZ());
+  glEnd();
+
+  glBegin(GL_POLYGON);
+    glVertex3f(cube.p1.getX(), cube.p1.getY(), cube.p1.getZ());
+    glVertex3f(cube.p5.getX(), cube.p5.getY(), cube.p5.getZ());
+    glVertex3f(cube.p6.getX(), cube.p6.getY(), cube.p6.getZ());
+    glVertex3f(cube.p2.getX(), cube.p2.getY(), cube.p2.getZ());
+  glEnd();
+
+  glBegin(GL_POLYGON);
+    glVertex3f(cube.p2.getX(), cube.p2.getY(), cube.p2.getZ());
+    glVertex3f(cube.p6.getX(), cube.p6.getY(), cube.p6.getZ());
+    glVertex3f(cube.p7.getX(), cube.p7.getY(), cube.p7.getZ());
+    glVertex3f(cube.p3.getX(), cube.p3.getY(), cube.p3.getZ());
+  glEnd();
+
+  glBegin(GL_POLYGON);
+    glVertex3f(cube.p7.getX(), cube.p7.getY(), cube.p7.getZ());
+    glVertex3f(cube.p3.getX(), cube.p3.getY(), cube.p3.getZ());
+    glVertex3f(cube.p4.getX(), cube.p4.getY(), cube.p4.getZ());
+    glVertex3f(cube.p8.getX(), cube.p8.getY(), cube.p8.getZ());
+  glEnd();
+
+  glBegin(GL_POLYGON);
+    glVertex3f(cube.p1.getX(), cube.p1.getY(), cube.p1.getZ());
+    glVertex3f(cube.p5.getX(), cube.p5.getY(), cube.p5.getZ());
+    glVertex3f(cube.p8.getX(), cube.p8.getY(), cube.p8.getZ());
+    glVertex3f(cube.p4.getX(), cube.p4.getY(), cube.p4.getZ());
+  glEnd();
+}
+
+void drawCube(Point* v, float size, int len)
+{
+  if(len == 1)
+  {
+    drawCube(v[0], size);
+  }
+  for (int i = 0; i < len; ++i)
+  {
+    float sizeSub = v[1].getZ() - v[0].getZ();
+    drawCube(v[i], sizeSub);
   }
 }

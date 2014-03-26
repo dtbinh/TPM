@@ -87,9 +87,16 @@ Point operator+(const Point &p1, const Point &p2)
 	return Point(p1.getX() + p2.getX(), p1.getY() + p2.getY(), p1.getZ() + p2.getZ());
 }
 
-// void operator=(Point &p1, const Point &p2)
-// {
-// 	p1.setX(p2.getX());
-// 	p1.setY(p2.getY());
-// 	p1.setZ(p2.getZ());
-// }
+ostream& operator<<(ostream& os, const Point& p)
+{
+    os << "(" << p.getX() << "," << p.getY() << "," << p.getZ() << ")" << endl;
+    return os;
+}
+
+Point& Point::operator=(const Point &p2)
+{
+	_x = p2.getX();
+	_y = p2.getY();
+	_z = p2.getZ();
+	return *this;
+}
