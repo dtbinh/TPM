@@ -28,6 +28,9 @@ class Point
 		Point projectOnLine(Point p, Vector vecteur);
 		Point projectOnPlan(Point pointOnPlane, Vector normalOfPlane);
 		Point& operator=(const Point &p2);
+
+		double distance(Point p);
+
 };
 
 Point operator*(const double &a, const Point &p);

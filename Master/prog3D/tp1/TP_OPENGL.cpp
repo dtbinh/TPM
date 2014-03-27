@@ -48,8 +48,16 @@ using namespace std;
 //touche pour augmenter ou diminuer le nombre de point de U
 #define KEY_D 100
 #define KEY_Q 113
+
+//faire pivoter la scene
 #define KEY_L 108
 #define KEY_K 107
+
+//augmenter diminuer la taille du cube
+#define KEY_W 119
+#define KEY_C 99
+
+//augmenter/diminuer le nombre de meridien/parallele
 #define KEY_PLUS 61
 #define KEY_MOINS 45
 long nbU = 3;
@@ -65,6 +73,9 @@ float angleCam = 0;
 
 int nbParallele = 8;
 int nbMeridien = 8;
+
+int nbSubdivision = 1;
+double lenCube = 8;
 
 
 // Entêtes de fonctions
@@ -195,11 +206,23 @@ GLvoid window_key(unsigned char key, int x, int y)
     break; 
   case KEY_D:
     nbU++;
+    nbSubdivision++;
     window_display();
     break;
   case KEY_Q:
     if(nbU > 3)
       nbU--;
+    if(nbSubdivision > 2)
+      nbSubdivision--;
+    window_display();
+    break;
+  case KEY_C:
+    lenCube++;
+    window_display();
+    break;
+  case KEY_W:
+    if(lenCube > 9)
+      lenCube--;
     window_display();
     break;
   case KEY_L:
@@ -344,18 +367,15 @@ void render_scene()
   //Exercice 1
   glColor3f(0, 1, 0);
   Point center = Point(0, 0, 0);
-  //drawCube(center, 8.0);
-  Cube cube = Cube(center, 8);
-  cout << "avant sub" << endl;
-  Point v[(int)pow(4, 3)];
-  cube.subdiviseCube(4, v);
-  for(int i; i < (int)pow(4, 3); i++)
-  {
-    cout << v[i] << endl;
-  }
-  cout << "apres sub" << endl;
-  drawCube(v, 8, (int)pow(4, 3));
-  cout << "apres draw" << endl;
+  //creation d'un cube de taille len
+  Cube cube = Cube(center, lenCube);
+  //v ==> tableau qui va contenir les centres des sous cubes
+  int lenTabSousCube = (int)pow(nbSubdivision, 3);
+  Point tabSousCube[lenTabSousCube];
+  //subdivision du cube
+  cube.subdiviseCube(nbSubdivision, tabSousCube);
+
+  drawCube(tabSousCube, lenCube, lenTabSousCube);
 }
 
 
@@ -703,3 +723,4 @@ void drawCube(Point* v, float size, int len)
     drawCube(v[i], sizeSub);
   }
 }
+

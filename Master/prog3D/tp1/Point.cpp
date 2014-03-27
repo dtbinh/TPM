@@ -100,3 +100,8 @@ Point& Point::operator=(const Point &p2)
 	_z = p2.getZ();
 	return *this;
 }
+
+double Point::distance(Point p)
+{
+	return sqrt(pow(_x - p._x, 2) + pow(_y - p._y, 2) + pow(_z - p._z, 2));
+}
